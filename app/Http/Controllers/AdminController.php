@@ -1,0 +1,226 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Event;
+use App\Models\Participant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AdminController extends Controller
+{
+    public function login()
+    {
+        return view('admin.login');
+    }
+
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard');
+        }
+
+        // Fallback: hardcoded admin login for prototype
+        if ($request->email === 'admin@eventflow.id' && $request->password === 'admin123') {
+            $request->session()->put('admin_logged_in', true);
+            return redirect()->route('admin.dashboard');
+        }
+
+        return back()->withErrors(['email' => 'Email atau password salah.']);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('admin_logged_in');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin.login');
+    }
+
+    public function dashboard()
+    {
+        $events = Event::withCount('participants')->get();
+        $totalPeserta = Participant::count();
+        $totalHadir = Participant::where('checked_in', true)->count();
+        $totalBelum = $totalPeserta - $totalHadir;
+        $checkinPercent = $totalPeserta > 0 ? round(($totalHadir / $totalPeserta) * 100) : 0;
+
+        $recentParticipants = Participant::with('event')->latest()->take(10)->get();
+        
+        $totalRevenue = Participant::where('participants.status', 'lunas')
+            ->join('events', 'participants.event_id', '=', 'events.id')
+            ->sum('events.price');
+
+        return view('admin.dashboard', compact('events', 'totalPeserta', 'totalHadir', 'totalBelum', 'checkinPercent', 'recentParticipants', 'totalRevenue'));
+    }
+
+    public function events()
+    {
+        $events = Event::withCount('participants')->get();
+        return view('admin.events', compact('events'));
+    }
+
+    public function storeEvent(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'speaker' => 'nullable|string|max:255',
+            'time_slot' => 'nullable|string|max:255',
+            'date' => 'required|date',
+            'location' => 'required|string|max:255',
+            'desc' => 'nullable|string',
+            'price' => 'required|integer|min:0',
+            'quota' => 'required|integer|min:1',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
+            'image_url' => 'nullable|string',
+        ]);
+
+        if ($request->hasFile('image_file')) {
+            $validated['image'] = $request->file('image_file')->store('events', 'public');
+        } elseif ($request->filled('image_url')) {
+            $validated['image'] = $request->input('image_url');
+        }
+
+        $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']) . '-' . time();
+
+        Event::create($validated);
+
+        return redirect()->route('admin.events')->with('success', 'Event berhasil ditambahkan.');
+    }
+
+    public function updateEvent(Request $request, Event $event)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'speaker' => 'nullable|string|max:255',
+            'time_slot' => 'nullable|string|max:255',
+            'date' => 'required|date',
+            'location' => 'required|string|max:255',
+            'desc' => 'nullable|string',
+            'price' => 'required|integer|min:0',
+            'quota' => 'required|integer|min:1',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
+            'image_url' => 'nullable|string',
+        ]);
+
+        if ($request->hasFile('image_file')) {
+            $validated['image'] = $request->file('image_file')->store('events', 'public');
+        } elseif ($request->filled('image_url')) {
+            $validated['image'] = $request->input('image_url');
+        }
+
+        $event->update($validated);
+
+        return redirect()->route('admin.events')->with('success', 'Event berhasil diperbarui.');
+    }
+
+    public function destroyEvent(Event $event)
+    {
+        $event->delete();
+        return redirect()->route('admin.events')->with('success', 'Event berhasil dihapus.');
+    }
+
+    public function participants(Request $request)
+    {
+        $search = $request->get('search');
+        $query = Participant::with('event');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('trx_id', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $participants = $query->latest()->get();
+
+        return view('admin.participants', compact('participants', 'search'));
+    }
+
+    public function scan()
+    {
+        return view('admin.scan');
+    }
+
+    public function processScan(Request $request)
+    {
+        $code = $request->input('code');
+        $participant = Participant::with('event')->where('trx_id', $code)->first();
+
+        if (!$participant) {
+            return response()->json(['error' => true, 'message' => 'Tiket tidak ditemukan.']);
+        }
+
+        if ($participant->checked_in) {
+            return response()->json([
+                'error' => false,
+                'already_checked' => true,
+                'participant' => $participant,
+            ]);
+        }
+
+        $participant->update([
+            'checked_in' => true,
+            'checkin_time' => now(),
+        ]);
+
+        return response()->json([
+            'error' => false,
+            'already_checked' => false,
+            'participant' => $participant->fresh(),
+        ]);
+    }
+
+    public function reports()
+    {
+        $events = Event::with('participants')->get();
+        $totalPeserta = Participant::count();
+        $totalHadir = Participant::where('checked_in', true)->count();
+        $totalBelum = $totalPeserta - $totalHadir;
+        $lunas = Participant::where('status', 'lunas')->count();
+        $pending = $totalPeserta - $lunas;
+
+        return view('admin.reports', compact('events', 'totalPeserta', 'totalHadir', 'totalBelum', 'lunas', 'pending'));
+    }
+
+    public function exportCsv()
+    {
+        $participants = Participant::with('event')->get();
+
+        $callback = function () use ($participants) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['Nama', 'Email', 'WhatsApp', 'Instansi', 'Event', 'Kode Tiket', 'Status Bayar', 'Check-in', 'Waktu Check-in']);
+
+            foreach ($participants as $p) {
+                fputcsv($file, [
+                    $p->name,
+                    $p->email,
+                    $p->phone,
+                    $p->instansi ?? '-',
+                    $p->event->title ?? '-',
+                    $p->trx_id,
+                    $p->status,
+                    $p->checked_in ? 'Hadir' : 'Belum',
+                    $p->checkin_time ? $p->checkin_time->format('d M Y, H:i') : '-',
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="data-peserta.csv"',
+        ];
+
+        return response()->stream($callback, 200, $headers);
+    }
+}
