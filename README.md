@@ -1,58 +1,135 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎟️ EventFlow & Tixia Ticketing Platform 2026
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **EventFlow & Tixia** adalah platform pendaftaran tiket seminar, kajian akbar, dan konferensi modern dengan antarmuka **Tixia Royal Blue Admin UI** dan **Bento Grid Public Landing Page**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 👤 Web Peserta (Public Portal)
+- 🚀 **Bento Grid Hero & Live Countdown Timer**: Tampilan beranda interaktif dengan visual bento cyber-emerald dan hitung mundur waktu acara secara real-time.
+- 🖼️ **Galeri Highlights & Lightbox Modal**: Dokumentasi foto kegiatan interaktif yang dapat diperbesar.
+- 📋 **Jadwal Sesi & Poster Event**: Daftar sesi kajian/konferensi lengkap dengan foto poster, nama pemateri 🎙️, tanggal 📅, waktu ⏱️, lokasi 📍, serta sisa kuota ⚡.
+- 💳 **Form Pendaftaran & QRIS Gateway**: Formulir pemesanan cepat dengan simulasi pembayaran QRIS dan rincian harga.
+- 🎟️ **E-Tiket Instant (Boarding Pass Style)**: Penerbitan e-tiket digital lengkap dengan Kode Transaksi Unik dan QR Code untuk verifikasi.
+- 🔍 **Pencarian Tiket Saya**: Halaman cek pesanan berdasarkan email, nama, atau kode transaksi (`TRX-XXXX`).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🛡️ Admin Dashboard (Tixia Theme)
+- 💙 **Tixia Royal Blue Sidebar**: Navigation bar bergaya royal blue dengan *white active pill state* dan rute navigasi 1-to-1 yang bersih.
+- 📊 **Stat Summary Banner**: Kartu metrik pendapatan (*Total Income*), jumlah pendaftar (*Customer*), dan persentase presensi (*Check-in Rate %*).
+- 📅 **Schedule Event Dropdown**: Menu dropdown interaktif pada topbar header untuk mengintip jadwal event aktif dan aksi cepat penambahan event.
+- 🖼️ **Manajemen Event & Poster**: CRUD event lengkap dengan fitur **Upload File Foto Poster** atau **URL Gambar** beserta **Live Preview**.
+- 📋 **Data Peserta & Order List**: Tabel data pendaftar dengan filter pencarian instan dan status bayar (*LUNAS / PENDING / REFUND*).
+- 📷 **Scan QR Check-in**: Halaman verifikasi dan simulasi scan QR Code / kode tiket peserta saat hari H event.
+- 📈 **Analytics & Export CSV**: Grafik rekap presensi check-in, status pembayaran, dan fitur unduh data peserta format CSV (`.csv`).
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Teknologi yang Digunakan
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Framework Backend**: Laravel 12.x (PHP 8.2+)
+- **Frontend Assets**: Vite 8, Tailwind CSS v4, Vanilla CSS Design System (Cyber Bento & Tixia Theme)
+- **Database**: MySQL / SQLite
+- **Testing**: PHPUnit / Laravel Feature & Unit Testing (100% Passed)
+- **Fonts**: Google Fonts (*Space Grotesk*, *Inter*, *IBM Plex Mono*)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🚀 Panduan Instalasi & Penggunaan
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Prasyarat System
+- PHP >= 8.2
+- Composer
+- Node.js & npm
 
+### 2. Cloning Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/ragepanz/project_ticketing.git
+cd project_ticketing
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Instalasi Dependensi PHP & JS
+```bash
+composer install
+npm install
+```
 
-## Contributing
+### 4. Konfigurasi Environment & Storage Link
+```bash
+cp .env.example .env
+php artisan key:generate
+php artisan storage:link
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 5. Migrasi & Seeding Database
+```bash
+php artisan migrate --seed
+```
 
-## Code of Conduct
+### 6. Menjalankan Server Lokal
+Jalankan dev server Vite dan Laravel Artisan:
+```bash
+npm run dev
+# Pada terminal lain:
+php artisan serve
+```
+Akses aplikasi melalui browser:
+- **Web Peserta**: `http://127.0.0.1:8000/peserta`
+- **Panel Admin**: `http://127.0.0.1:8000/admin/login`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🔐 Kredensial Akun Admin Prototype
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Field | Kredensial |
+| :--- | :--- |
+| **URL Login** | `/admin/login` |
+| **Email** | `admin@eventflow.id` |
+| **Password** | `admin123` |
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🧪 Pengujian Otomatis (Testing)
+
+Proyek ini telah dilengkapi dengan suite pengujian otomatis menyeluruh:
+
+```bash
+php artisan test
+```
+
+### Hasil Test:
+- **8 Tests Passed (100% Lulus)**
+- **36 Assertions Passed**
+
+---
+
+## 📁 Struktur Direktori Utama
+
+```
+project_ticketing/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── AdminController.php   # Controller Panel Admin (CRUD, Scan, Reports)
+│   │   └── PesertaController.php # Controller Web Peserta (Booking, Payment, E-Ticket)
+│   └── Models/
+│       ├── Event.php             # Model Event dengan accessor image_url & rupiah
+│       └── Participant.php       # Model Peserta & transaksi tiket
+├── database/
+│   ├── migrations/               # Skema tabel events, participants, & add_image
+│   └── seeders/                  # Seeder data event & peserta awal
+├── resources/
+│   ├── css/app.css               # Design system Bento & Tixia Theme CSS
+│   └── views/
+│       ├── admin/                # Template Blade Admin Tixia
+│       ├── peserta/              # Template Blade Web Peserta
+│       └── layouts/              # Master layout App & Admin
+├── routes/
+│   └── web.php                   # Rute navigasi publik & admin
+└── tests/
+    └── Feature/TicketingTest.php # Automated Feature Tests
+```
+
+---
+
+## 📄 Lisensi
+[MIT License](LICENSE) © 2026 EventFlow & Tixia Ticketing Team.
