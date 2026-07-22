@@ -92,67 +92,7 @@
           <input type="text" name="search" placeholder="Search here" value="{{ request('search') }}" class="tixia-search-input">
         </form>
 
-        <!-- Notification Bell Dropdown -->
-        <div style="position: relative;">
-          <button type="button" class="tixia-icon-btn" title="Notifikasi Sistem" onclick="toggleTopbarDropdown(event, 'notif-dropdown')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-            </svg>
-            <span class="dot-badge yellow"></span>
-          </button>
-          
-          <div class="tixia-dropdown-menu" id="notif-dropdown">
-            <div class="dd-header" style="display:flex; justify-content:space-between; align-items:center;">
-              <span>Notifikasi System</span>
-              <span style="font-size:10px; background:#10b981; color:#ffffff; padding:2px 7px; border-radius:10px; font-weight:700;">3 BARU</span>
-            </div>
-            <div class="dd-list">
-              <a href="{{ route('admin.participants') }}" class="dd-item">
-                <div class="dd-title">Pendaftaran Baru #TRX-8291</div>
-                <div class="dd-meta">Budi Santoso memesan 1 tiket Seminar — 4m lalu</div>
-              </a>
-              <a href="{{ route('admin.scan') }}" class="dd-item">
-                <div class="dd-title">Presensi QR Check-in</div>
-                <div class="dd-meta">Siti Rahma telah berhasil verified check-in — 18m lalu</div>
-              </a>
-              <a href="{{ route('admin.reports') }}" class="dd-item">
-                <div class="dd-title">Milestone Kuota Event</div>
-                <div class="dd-meta">Event flow tiket terjual melebihi 85% — 1j lalu</div>
-              </a>
-            </div>
-            <div class="dd-footer">
-              <a href="{{ route('admin.participants') }}" class="dd-action">Lihat Semua Data Peserta</a>
-            </div>
-          </div>
-        </div>
 
-        <!-- Message/Chat Dropdown -->
-        <div style="position: relative;">
-          <button type="button" class="tixia-icon-btn" title="Pesan & Pertanyaan" onclick="toggleTopbarDropdown(event, 'msg-dropdown')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <span class="dot-badge green"></span>
-          </button>
-
-          <div class="tixia-dropdown-menu" id="msg-dropdown">
-            <div class="dd-header">Pesan Peserta</div>
-            <div class="dd-list">
-              <a href="{{ route('admin.participants') }}" class="dd-item">
-                <div class="dd-title">Ahmad Rizky</div>
-                <div class="dd-meta">"Halo min, apakah invoice bisa dikirim ulang?" — 12m lalu</div>
-              </a>
-              <a href="{{ route('admin.participants') }}" class="dd-item">
-                <div class="dd-title">Maya Putri</div>
-                <div class="dd-meta">"Konfirmasi pembayaran QRIS sudah terverifikasi?" — 42m lalu</div>
-              </a>
-            </div>
-            <div class="dd-footer">
-              <a href="{{ route('admin.participants') }}" class="dd-action">Kelola Data Peserta</a>
-            </div>
-          </div>
-        </div>
 
         <!-- User Profile Avatar Dropdown -->
         <div style="position: relative;">
