@@ -64,6 +64,13 @@ class TicketingTest extends TestCase
 
     public function test_admin_authentication_and_dashboard(): void
     {
+        \App\Models\User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@eventflow.id',
+            'password' => 'admin123',
+            'role' => 'admin',
+        ]);
+
         $loginResponse = $this->post('/admin/login', [
             'email' => 'admin@eventflow.id',
             'password' => 'admin123',
