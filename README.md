@@ -1,46 +1,56 @@
-# 🎟️ EventFlow & Tixia Ticketing Platform 2026
+# EventFlow & Tixia Ticketing Platform 2026
 
-> **EventFlow & Tixia** adalah platform pendaftaran tiket seminar, kajian akbar, dan konferensi modern dengan antarmuka **Tixia Royal Blue Admin UI** dan **Bento Grid Public Landing Page**.
-
----
-
-## ✨ Fitur Utama
-
-### 👤 Web Peserta (Public Portal)
-- 🚀 **Bento Grid Hero & Live Countdown Timer**: Tampilan beranda interaktif dengan visual bento cyber-emerald dan hitung mundur waktu acara secara real-time.
-- 🖼️ **Galeri Highlights & Lightbox Modal**: Dokumentasi foto kegiatan interaktif yang dapat diperbesar.
-- 📋 **Jadwal Sesi & Poster Event**: Daftar sesi kajian/konferensi lengkap dengan foto poster, nama pemateri 🎙️, tanggal 📅, waktu ⏱️, lokasi 📍, serta sisa kuota ⚡.
-- 💳 **Form Pendaftaran & QRIS Gateway**: Formulir pemesanan cepat dengan simulasi pembayaran QRIS dan rincian harga.
-- 🎟️ **E-Tiket Instant (Boarding Pass Style)**: Penerbitan e-tiket digital lengkap dengan Kode Transaksi Unik dan QR Code untuk verifikasi.
-- 🔍 **Pencarian Tiket Saya**: Halaman cek pesanan berdasarkan email, nama, atau kode transaksi (`TRX-XXXX`).
-
-### 🛡️ Admin Dashboard (Tixia Theme)
-- 💙 **Tixia Royal Blue Sidebar**: Navigation bar bergaya royal blue dengan *white active pill state* dan rute navigasi 1-to-1 yang bersih.
-- 📊 **Stat Summary Banner**: Kartu metrik pendapatan (*Total Income*), jumlah pendaftar (*Customer*), dan persentase presensi (*Check-in Rate %*).
-- 📅 **Schedule Event Dropdown**: Menu dropdown interaktif pada topbar header untuk mengintip jadwal event aktif dan aksi cepat penambahan event.
-- 🖼️ **Manajemen Event & Poster**: CRUD event lengkap dengan fitur **Upload File Foto Poster** atau **URL Gambar** beserta **Live Preview**.
-- 📋 **Data Peserta & Order List**: Tabel data pendaftar dengan filter pencarian instan dan status bayar (*LUNAS / PENDING / REFUND*).
-- 📷 **Scan QR Check-in**: Halaman verifikasi dan simulasi scan QR Code / kode tiket peserta saat hari H event.
-- 📈 **Analytics & Export CSV**: Grafik rekap presensi check-in, status pembayaran, dan fitur unduh data peserta format CSV (`.csv`).
+EventFlow & Tixia adalah platform pendaftaran tiket seminar, kajian akbar, dan konferensi modern dengan antarmuka Tixia Royal Blue Admin UI dan Bento Grid Public Landing Page.
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## Fitur Utama
 
-- **Framework Backend**: Laravel 12.x (PHP 8.2+)
-- **Frontend Assets**: Vite 8, Tailwind CSS v4, Vanilla CSS Design System (Cyber Bento & Tixia Theme)
-- **Database**: MySQL / SQLite
-- **Testing**: PHPUnit / Laravel Feature & Unit Testing (100% Passed)
-- **Fonts**: Google Fonts (*Space Grotesk*, *Inter*, *IBM Plex Mono*)
+### Web Peserta (Public Portal)
+- Bento Grid Hero & Live Countdown Timer: Tampilan beranda interaktif dengan visual bento cyber-emerald dan hitung mundur waktu acara secara real-time.
+- Galeri Highlights & Lightbox Modal: Dokumentasi foto kegiatan interaktif yang dapat diperbesar.
+- Jadwal Sesi & Poster Event: Daftar sesi kajian/konferensi lengkap dengan foto poster, nama pemateri, tanggal, waktu, lokasi, serta sisa kuota.
+- Form Pendaftaran & QRIS Gateway: Formulir pemesanan cepat dengan simulasi pembayaran QRIS dan rincian harga.
+- E-Tiket Instant (Boarding Pass Style): Penerbitan e-tiket digital lengkap dengan Kode Transaksi Unik dan QR Code untuk verifikasi.
+- Pencarian Tiket Saya: Halaman cek pesanan berdasarkan email, nama, atau kode transaksi (TRX-XXXX).
+
+### Admin Dashboard (Tixia Theme)
+- Tixia Royal Blue Sidebar: Navigation bar bergaya royal blue dengan white active pill state dan rute navigasi 1-to-1 yang bersih.
+- Stat Summary Banner: Kartu metrik pendapatan (Total Income), jumlah pendaftar (Customer), dan persentase presensi (Check-in Rate %).
+- Schedule Event Dropdown: Menu dropdown interaktif pada topbar header untuk mengintip jadwal event aktif dan aksi cepat penambahan event.
+- Manajemen Event & Poster: CRUD event lengkap dengan fitur Upload File Foto Poster atau URL Gambar beserta Live Preview.
+- Data Peserta & Order List: Tabel data pendaftar dengan filter pencarian instan dan status bayar (LUNAS / PENDING / REFUND).
+- Scan QR Check-in: Halaman verifikasi dan simulasi scan QR Code / kode tiket peserta saat hari H event.
+- Analytics & Export CSV: Grafik rekap presensi check-in, status pembayaran, dan fitur unduh data peserta format CSV (.csv).
+- **Manajemen Admin**: Superadmin dapat mengelola (tambah, edit, hapus) akun admin lainnya.
+- **Ubah Password**: Setiap admin/superadmin dapat mengganti password masing-masing.
+
+### Role System
+| Role | Akses |
+|---|---|
+| Superadmin | Full akses dashboard + kelola admin (tambah/edit/hapus admin lain) |
+| Admin | Akses dashboard, tidak bisa kelola admin lain |
+| Client | (Public guest, tidak login) |
 
 ---
 
-## 🚀 Panduan Instalasi & Penggunaan
+## Teknologi yang Digunakan
+
+- Framework Backend: Laravel 12.x (PHP 8.2+)
+- Frontend Assets: Vite 8, Tailwind CSS v4, Vanilla CSS Design System (Cyber Bento & Tixia Theme)
+- Database: MySQL / SQLite
+- Testing: PHPUnit / Laravel Feature & Unit Testing (100% Passed)
+- Fonts: Google Fonts (Space Grotesk, Inter, IBM Plex Mono)
+
+---
+
+## Panduan Instalasi & Penggunaan
 
 ### 1. Prasyarat System
 - PHP >= 8.2
 - Composer
 - Node.js & npm
+- MySQL (untuk production) atau SQLite (untuk development)
 
 ### 2. Cloning Repository
 ```bash
@@ -74,22 +84,30 @@ npm run dev
 php artisan serve
 ```
 Akses aplikasi melalui browser:
-- **Web Peserta**: `http://127.0.0.1:8000/peserta`
-- **Panel Admin**: `http://127.0.0.1:8000/admin/login`
+- Web Peserta: `http://127.0.0.1:8000/peserta`
+- Panel Admin: `http://127.0.0.1:8000/admin/login`
 
 ---
 
-## 🔐 Kredensial Akun Admin Prototype
+## Kredensial Akun
 
+### Superadmin
 | Field | Kredensial |
-| :--- | :--- |
-| **URL Login** | `/admin/login` |
-| **Email** | `admin@eventflow.id` |
-| **Password** | `admin123` |
+|---|---|
+| URL Login | `/admin/login` |
+| Email | `admin@eventflow.id` |
+| Password | `admin123` |
+
+### Admin (dikelola oleh superadmin)
+| Nama | Email | Password |
+|---|---|---|
+| Fajri | fajri@eventflow.id | admin123 |
+| Rizky | rizky@eventflow.id | admin123 |
+| Sari | sari@eventflow.id | admin123 |
 
 ---
 
-## 🧪 Pengujian Otomatis (Testing)
+## Pengujian Otomatis (Testing)
 
 Proyek ini telah dilengkapi dengan suite pengujian otomatis menyeluruh:
 
@@ -98,38 +116,39 @@ php artisan test
 ```
 
 ### Hasil Test:
-- **8 Tests Passed (100% Lulus)**
-- **36 Assertions Passed**
+- 8 Tests Passed (100% Lulus)
+- 36 Assertions Passed
 
 ---
 
-## 📁 Struktur Direktori Utama
+## Struktur Direktori Utama
 
 ```
 project_ticketing/
 ├── app/
 │   ├── Http/Controllers/
-│   │   ├── AdminController.php   # Controller Panel Admin (CRUD, Scan, Reports)
-│   │   └── PesertaController.php # Controller Web Peserta (Booking, Payment, E-Ticket)
+│   │   ├── AdminController.php     # Controller Panel Admin (CRUD Event, Scan, Reports, Users)
+│   │   └── PesertaController.php   # Controller Web Peserta (Booking, Payment, E-Ticket)
 │   └── Models/
-│       ├── Event.php             # Model Event dengan accessor image_url & rupiah
-│       └── Participant.php       # Model Peserta & transaksi tiket
+│       ├── Event.php               # Model Event
+│       ├── Participant.php         # Model Peserta & transaksi tiket
+│       ├── Payment.php             # Model Pembayaran
+│       └── User.php                # Model User dengan role (superadmin/admin/client)
 ├── database/
-│   ├── migrations/               # Skema tabel events, participants, & add_image
-│   └── seeders/                  # Seeder data event & peserta awal
+│   ├── migrations/                 # Skema tabel users, events, participants, payments
+│   └── seeders/                    # Seeder data awal
 ├── resources/
-│   ├── css/app.css               # Design system Bento & Tixia Theme CSS
 │   └── views/
-│       ├── admin/                # Template Blade Admin Tixia
-│       ├── peserta/              # Template Blade Web Peserta
-│       └── layouts/              # Master layout App & Admin
+│       ├── admin/                  # Template Blade Admin (dashboard, events, users, password)
+│       ├── peserta/                # Template Blade Web Peserta
+│       └── layouts/                # Master layout App & Admin
 ├── routes/
-│   └── web.php                   # Rute navigasi publik & admin
+│   └── web.php                     # Rute navigasi publik & admin
 └── tests/
-    └── Feature/TicketingTest.php # Automated Feature Tests
+    └── Feature/TicketingTest.php   # Automated Feature Tests
 ```
 
 ---
 
-## 📄 Lisensi
-[MIT License](LICENSE) © 2026 EventFlow & Tixia Ticketing Team.
+## Lisensi
+MIT License (c) 2026 EventFlow & Tixia Ticketing Team.
