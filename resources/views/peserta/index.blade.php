@@ -201,7 +201,8 @@
   <div class="sessions-list">
     @forelse($events as $event)
       @php $full = $event->participants_count >= $event->quota; @endphp
-      <a href="{{ $full ? '#' : route('peserta.detail', $event) }}" class="session-card" style="{{ $full ? 'opacity:0.6; cursor:not-allowed;' : '' }}">
+      @if($full)
+      <div class="session-card" style="opacity:0.5; cursor:default;">
         <div class="session-card-image">
           <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
         </div>
@@ -211,9 +212,24 @@
           </div>
           <div class="session-card-title">{{ $event->title }}</div>
           <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
-          <div class="session-card-action" style="{{ $full ? 'background:rgba(239,68,68,0.2); border-color:rgba(239,68,68,0.3); color:#ef4444;' : '' }}">@if($full)Kuota Penuh @else Beli Tiket @endif</div>
+          <div class="session-card-action" style="background:rgba(239,68,68,0.2); border-color:rgba(239,68,68,0.3); color:#ef4444;">Kuota Penuh</div>
+        </div>
+      </div>
+      @else
+      <a href="{{ route('peserta.detail', $event) }}" class="session-card">
+        <div class="session-card-image">
+          <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
+        </div>
+        <div class="session-card-body">
+          <div class="session-time-badge">
+            {{ $event->time_slot ?? '10.00 WIB' }} · {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
+          </div>
+          <div class="session-card-title">{{ $event->title }}</div>
+          <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
+          <div class="session-card-action">Beli Tiket</div>
         </div>
       </a>
+      @endif
     @empty
       <div class="empty" style="color:#fff; text-align:center; padding:40px;">Belum ada sesi yang tersedia.</div>
     @endforelse
