@@ -211,7 +211,31 @@
   </div>
 </section>
 
-<!-- 4. MODERN TECH FOOTER -->
+<!-- 4. CONTACT US SECTION -->
+<section class="bento-section" id="contact" style="padding-bottom:0;">
+  <div class="section-title-wrap">
+    <h2>Hubungi Kami</h2>
+    <p>Butuh bantuan? Silakan hubungi kami melalui kontak di bawah</p>
+  </div>
+  <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap; max-width:600px; margin:0 auto;">
+    <a href="mailto:info@eventflow.id" style="flex:1; min-width:200px; display:flex; align-items:center; gap:12px; background:var(--bento-card-bg); border:1px solid var(--bento-border); border-radius:16px; padding:20px 24px; text-decoration:none; transition:.3s;" onmouseover="this.style.borderColor='var(--bento-emerald)'" onmouseout="this.style.borderColor='var(--bento-border)'">
+      <div style="width:44px; height:44px; border-radius:12px; background:rgba(16,185,129,0.15); display:flex; align-items:center; justify-content:center; font-size:22px;">✉️</div>
+      <div>
+        <div style="font-size:13px; color:var(--bento-muted);">Email</div>
+        <div style="font-size:15px; font-weight:600; color:#fff;">info@eventflow.id</div>
+      </div>
+    </a>
+    <a href="https://wa.me/6281234567890" target="_blank" style="flex:1; min-width:200px; display:flex; align-items:center; gap:12px; background:var(--bento-card-bg); border:1px solid var(--bento-border); border-radius:16px; padding:20px 24px; text-decoration:none; transition:.3s;" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='var(--bento-border)'">
+      <div style="width:44px; height:44px; border-radius:12px; background:rgba(37,211,102,0.15); display:flex; align-items:center; justify-content:center; font-size:22px;">💬</div>
+      <div>
+        <div style="font-size:13px; color:var(--bento-muted);">WhatsApp</div>
+        <div style="font-size:15px; font-weight:600; color:#fff;">+62 812-3456-7890</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- 5. MODERN TECH FOOTER -->
 <footer class="bento-footer">
   <div class="footer-inner">
     <div class="footer-brand">
