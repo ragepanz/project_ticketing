@@ -25,6 +25,13 @@
     <div class="persona-switch">
       <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
       <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket Saya</a>
+      @auth
+        @if(Auth::user()->role === 'client')
+        <a href="{{ route('client.dashboard') }}" class="{{ request()->routeIs('client.dashboard') ? 'active' : '' }}">Dashboard Saya</a>
+        @endif
+      @else
+      <a href="{{ route('client.login') }}" class="{{ request()->routeIs('client.login') || request()->routeIs('client.register') ? 'active' : '' }}">Login</a>
+      @endauth
     </div>
   </div>
   @endif
@@ -45,6 +52,13 @@
     <div class="persona-switch">
       <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
       <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket</a>
+      @auth
+        @if(Auth::user()->role === 'client')
+        <a href="{{ route('client.dashboard') }}" class="{{ request()->routeIs('client.dashboard') ? 'active' : '' }}">Dashboard Saya</a>
+        @endif
+      @else
+      <a href="{{ route('client.login') }}" class="{{ request()->routeIs('client.login') || request()->routeIs('client.register') ? 'active' : '' }}">Login</a>
+      @endauth
     </div>
   </div>
 

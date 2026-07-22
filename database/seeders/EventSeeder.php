@@ -9,8 +9,7 @@ class EventSeeder extends Seeder
 {
     public function run(): void
     {
-        Event::create([
-            'slug' => 'cinta-itu-bernama-taat',
+        Event::firstOrCreate(['slug' => 'cinta-itu-bernama-taat'], [
             'title' => 'CINTA ITU Bernama Ta\'at',
             'speaker' => 'Ustadz Dr. Khalid Basalamah',
             'time_slot' => '10.00 - 11.30 WIB',
@@ -21,8 +20,7 @@ class EventSeeder extends Seeder
             'desc' => 'Sesi kajian utama bersama Ustadz Dr. Khalid Basalamah yang mengupas tuntas hakikat cinta, ketaatan, dan ketauhidan.',
         ]);
 
-        Event::create([
-            'slug' => 'ketika-hati-memilih',
+        Event::firstOrCreate(['slug' => 'ketika-hati-memilih'], [
             'title' => 'KETIKA Hati Memilih',
             'speaker' => 'Ustadz Dr. Syafiq Riza Basalamah',
             'time_slot' => '15.55 - 17.50 WIB',
@@ -33,8 +31,7 @@ class EventSeeder extends Seeder
             'desc' => 'Saat logika dan perasaan bertemu dalam sebuah keputusan. Sesi inspiratif bersama Ustadz Dr. Syafiq Riza Basalamah.',
         ]);
 
-        Event::create([
-            'slug' => 'setiap-kita-ada-mahakarya',
+        Event::firstOrCreate(['slug' => 'setiap-kita-ada-mahakarya'], [
             'title' => 'SETIAP KITA, ADA MAHAKARYA Kebesaran-Nya',
             'speaker' => 'dr. Bobby Arfhan Anwar Sp.JP(K)',
             'time_slot' => '08.30 - 09.30 WIB',

@@ -29,6 +29,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Sari', 'password' => 'admin123', 'role' => 'admin'],
         );
 
+        User::firstOrCreate(
+            ['email' => 'client@eventflow.id'],
+            ['name' => 'Ahmad Client', 'password' => 'client123', 'role' => 'client'],
+        );
+
         $this->call([
             EventSeeder::class,
             ParticipantSeeder::class,
