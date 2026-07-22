@@ -15,52 +15,73 @@
 @if(View::hasSection('fullwidth'))
   @if(!request()->routeIs('admin.*'))
   <!-- Public User Top Bar -->
-  <div class="prototype-switch-bar">
-    <div class="brand-mini">
-      <div class="mark">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5V7M15 11V13M15 17V19M5 5H19C20.1 5 21 5.9 21 7V9.5C19.9 9.5 19 10.4 19 11.5C19 12.6 19.9 13.5 21 13.5V17C21 18.1 20.1 19 19 19H5C3.9 19 3 18.1 3 17V13.5C4.1 13.5 5 12.6 5 11.5C5 10.4 4.1 9.5 3 9.5V7C3 5.9 3.9 5 5 5Z"/></svg>
+  <header class="public-navbar">
+    <div class="nav-container">
+      <div class="nav-brand-group">
+        <a href="{{ route('peserta.index') }}" class="nav-brand">
+          <div class="mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5V7M15 11V13M15 17V19M5 5H19C20.1 5 21 5.9 21 7V9.5C19.9 9.5 19 10.4 19 11.5C19 12.6 19.9 13.5 21 13.5V17C21 18.1 20.1 19 19 19H5C3.9 19 3 18.1 3 17V13.5C4.1 13.5 5 12.6 5 11.5C5 10.4 4.1 9.5 3 9.5V7C3 5.9 3.9 5 5 5Z"/></svg>
+          </div>
+          <span class="txt">EventFlow</span>
+        </a>
+        <nav class="nav-menu">
+          <a href="{{ route('peserta.index') }}" class="nav-item {{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
+          <a href="{{ route('peserta.search-order') }}" class="nav-item {{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket Saya</a>
+        </nav>
       </div>
-      <span class="txt">EventFlow</span>
+
+      <div class="nav-auth-group">
+        @auth
+          @if(Auth::user()->role === 'client')
+            <a href="{{ route('client.dashboard') }}" class="btn-nav-dash">Dashboard Saya</a>
+            <a href="{{ route('client.logout') }}" class="btn-nav-logout">Logout</a>
+          @else
+            <a href="{{ route('admin.dashboard') }}" class="btn-nav-dash">Panel Admin</a>
+            <a href="{{ route('admin.logout') }}" class="btn-nav-logout">Logout</a>
+          @endif
+        @else
+          <a href="{{ route('client.login') }}" class="btn-nav-login {{ request()->routeIs('client.login') ? 'active' : '' }}">Login</a>
+          <a href="{{ route('client.register') }}" class="btn-nav-register">Register</a>
+        @endauth
+      </div>
     </div>
-    <div class="persona-switch">
-      <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
-      <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket Saya</a>
-      @auth
-        @if(Auth::user()->role === 'client')
-        <a href="{{ route('client.dashboard') }}" class="{{ request()->routeIs('client.dashboard') ? 'active' : '' }}">Dashboard Saya</a>
-        @endif
-      @else
-      <a href="{{ route('client.login') }}" class="{{ request()->routeIs('client.login') || request()->routeIs('client.register') ? 'active' : '' }}">Login</a>
-      @endauth
-    </div>
-  </div>
+  </header>
   @endif
 
   @yield('fullwidth')
 @else
 <div class="app-shell">
-  <div class="topbar">
-    <div class="brand">
-      <a href="{{ route('peserta.index') }}" style="display:flex; align-items:center; gap:10px;">
-        <div class="mark">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5V7M15 11V13M15 17V19M5 5H19C20.1 5 21 5.9 21 7V9.5C19.9 9.5 19 10.4 19 11.5C19 12.6 19.9 13.5 21 13.5V17C21 18.1 20.1 19 19 19H5C3.9 19 3 18.1 3 17V13.5C4.1 13.5 5 12.6 5 11.5C5 10.4 4.1 9.5 3 9.5V7C3 5.9 3.9 5 5 5Z"/></svg>
-        </div>
-        <div class="name">EventFlow</div>
-        <div class="tag">Pendaftaran Tiket Online</div>
-      </a>
+  <header class="public-navbar inner-topbar">
+    <div class="nav-container">
+      <div class="nav-brand-group">
+        <a href="{{ route('peserta.index') }}" class="nav-brand">
+          <div class="mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5V7M15 11V13M15 17V19M5 5H19C20.1 5 21 5.9 21 7V9.5C19.9 9.5 19 10.4 19 11.5C19 12.6 19.9 13.5 21 13.5V17C21 18.1 20.1 19 19 19H5C3.9 19 3 18.1 3 17V13.5C4.1 13.5 5 12.6 5 11.5C5 10.4 4.1 9.5 3 9.5V7C3 5.9 3.9 5 5 5Z"/></svg>
+          </div>
+          <span class="txt">EventFlow</span>
+        </a>
+        <nav class="nav-menu">
+          <a href="{{ route('peserta.index') }}" class="nav-item {{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
+          <a href="{{ route('peserta.search-order') }}" class="nav-item {{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket</a>
+        </nav>
+      </div>
+
+      <div class="nav-auth-group">
+        @auth
+          @if(Auth::user()->role === 'client')
+            <a href="{{ route('client.dashboard') }}" class="btn-nav-dash">Dashboard Saya</a>
+            <a href="{{ route('client.logout') }}" class="btn-nav-logout">Logout</a>
+          @else
+            <a href="{{ route('admin.dashboard') }}" class="btn-nav-dash">Panel Admin</a>
+            <a href="{{ route('admin.logout') }}" class="btn-nav-logout">Logout</a>
+          @endif
+        @else
+          <a href="{{ route('client.login') }}" class="btn-nav-login {{ request()->routeIs('client.login') ? 'active' : '' }}">Login</a>
+          <a href="{{ route('client.register') }}" class="btn-nav-register">Register</a>
+        @endauth
+      </div>
     </div>
-    <div class="persona-switch">
-      <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
-      <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket</a>
-      @auth
-        @if(Auth::user()->role === 'client')
-        <a href="{{ route('client.dashboard') }}" class="{{ request()->routeIs('client.dashboard') ? 'active' : '' }}">Dashboard Saya</a>
-        @endif
-      @else
-      <a href="{{ route('client.login') }}" class="{{ request()->routeIs('client.login') || request()->routeIs('client.register') ? 'active' : '' }}">Login</a>
-      @endauth
-    </div>
-  </div>
+  </header>
 
   <div class="panel" id="panel-root">
     @yield('content')
