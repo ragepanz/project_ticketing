@@ -192,29 +192,17 @@
 
   <div class="sessions-list">
     @forelse($events as $event)
-      <a href="{{ route('peserta.detail', $event) }}" class="session-card-row" style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <!-- Event Poster Thumbnail -->
-          <div style="width: 72px; height: 72px; border-radius: 14px; overflow: hidden; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0;">
-            <img src="{{ $event->image_url }}" alt="{{ $event->title }}" style="width: 100%; height: 100%; object-fit: cover;">
-          </div>
-
-          <div class="session-info">
-            <div class="session-time-badge" style="display: inline-flex; align-items: center; gap: 6px;">
-              <span>⏱️ {{ $event->time_slot ?? '10.00 WIB' }}</span>
-              <span>·</span>
-              <span>📅 {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</span>
-            </div>
-
-            <div class="session-details" style="margin-top: 6px;">
-              <div class="s-title" style="font-size: 16px; font-weight: 700;">{{ $event->title }}</div>
-              <div class="s-speaker" style="margin-top: 2px;">🎙️ {{ $event->speaker ?? 'Pemateri Utama' }} · 📍 {{ $event->location }}</div>
-            </div>
-          </div>
+      <a href="{{ route('peserta.detail', $event) }}" class="session-card">
+        <div class="session-card-image">
+          <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
         </div>
-
-        <div class="btn-session-action">
-          PILIH & DAFTAR TIKET →
+        <div class="session-card-body">
+          <div class="session-time-badge">
+            ⏱️ {{ $event->time_slot ?? '10.00 WIB' }} · 📅 {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
+          </div>
+          <div class="session-card-title">{{ $event->title }}</div>
+          <div class="session-card-meta">🎙️ {{ $event->speaker ?? 'Pemateri Utama' }} · 📍 {{ $event->location }}</div>
+          <div class="session-card-action">PILIH & DAFTAR TIKET →</div>
         </div>
       </a>
     @empty
