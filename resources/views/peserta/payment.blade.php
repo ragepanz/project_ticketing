@@ -27,7 +27,7 @@
       <a href="{{ route('peserta.review', $event) }}" class="btn btn-ghost">Kembali</a>
       <form method="POST" action="{{ route('peserta.confirm', $event) }}" style="flex:1">
         @csrf
-        <button type="submit" class="btn btn-primary">Simulasikan Pembayaran Berhasil</button>
+        <button type="submit" class="btn btn-primary">Konfirmasi &amp; Saya Sudah Bayar →</button>
       </form>
     </div>
   </div>
