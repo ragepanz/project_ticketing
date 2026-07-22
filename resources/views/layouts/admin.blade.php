@@ -90,26 +90,103 @@
           <input type="text" name="search" placeholder="Search here" value="{{ request('search') }}" class="tixia-search-input">
         </form>
 
-        <!-- Notification Bell -->
-        <button class="tixia-icon-btn" title="Notifications">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17H3L5 15V9a7 7 0 1114 0v6l2 2h-6m-6 0a3 3 0 006 0"/></svg>
-          <span class="dot-badge yellow"></span>
-        </button>
+        <!-- Notification Bell Dropdown -->
+        <div style="position: relative;">
+          <button type="button" class="tixia-icon-btn" title="Notifikasi Sistem" onclick="toggleTopbarDropdown(event, 'notif-dropdown')">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17H3L5 15V9a7 7 0 1114 0v6l2 2h-6m-6 0a3 3 0 006 0"/></svg>
+            <span class="dot-badge yellow"></span>
+          </button>
+          
+          <div class="tixia-dropdown-menu" id="notif-dropdown">
+            <div class="dd-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Notifikasi System</span>
+              <span style="font-size:10px; background:#10b981; color:#ffffff; padding:2px 7px; border-radius:10px; font-weight:700;">3 BARU</span>
+            </div>
+            <div class="dd-list">
+              <a href="{{ route('admin.participants') }}" class="dd-item">
+                <div class="dd-title">🎟️ Pendaftaran Baru #TRX-8291</div>
+                <div class="dd-meta">Budi Santoso memesan 1 tiket Seminar — 4m lalu</div>
+              </a>
+              <a href="{{ route('admin.scan') }}" class="dd-item">
+                <div class="dd-title">📷 Presensi QR Check-in</div>
+                <div class="dd-meta">Siti Rahma telah berhasil verified check-in — 18m lalu</div>
+              </a>
+              <a href="{{ route('admin.reports') }}" class="dd-item">
+                <div class="dd-title">📈 Milestone Kuota Event</div>
+                <div class="dd-meta">Event flow tiket terjual melebihi 85% — 1j lalu</div>
+              </a>
+            </div>
+            <div class="dd-footer">
+              <a href="{{ route('admin.participants') }}" class="dd-action">Lihat Semua Data Peserta</a>
+            </div>
+          </div>
+        </div>
 
-        <!-- Message/Chat Icon -->
-        <button class="tixia-icon-btn" title="Messages">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-          <span class="dot-badge green"></span>
-        </button>
+        <!-- Message/Chat Dropdown -->
+        <div style="position: relative;">
+          <button type="button" class="tixia-icon-btn" title="Pesan & Pertanyaan" onclick="toggleTopbarDropdown(event, 'msg-dropdown')">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <span class="dot-badge green"></span>
+          </button>
 
-        <!-- User Profile Avatar -->
-        <div class="tixia-user-profile">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Admin Avatar" class="tixia-avatar">
+          <div class="tixia-dropdown-menu" id="msg-dropdown">
+            <div class="dd-header">Pesan Peserta</div>
+            <div class="dd-list">
+              <a href="{{ route('admin.participants') }}" class="dd-item">
+                <div class="dd-title">💬 Ahmad Rizky</div>
+                <div class="dd-meta">"Halo min, apakah invoice bisa dikirim ulang?" — 12m lalu</div>
+              </a>
+              <a href="{{ route('admin.participants') }}" class="dd-item">
+                <div class="dd-title">💬 Maya Putri</div>
+                <div class="dd-meta">"Konfirmasi pembayaran QRIS sudah terverifikasi?" — 42m lalu</div>
+              </a>
+            </div>
+            <div class="dd-footer">
+              <a href="{{ route('admin.participants') }}" class="dd-action">Kelola Data Peserta</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Profile Avatar Dropdown -->
+        <div style="position: relative;">
+          <button type="button" class="tixia-user-profile" onclick="toggleTopbarDropdown(event, 'profile-dropdown')" style="background:none; border:none; padding:0; cursor:pointer;" title="Profil Administrator">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Admin Avatar" class="tixia-avatar">
+          </button>
+
+          <div class="tixia-dropdown-menu" id="profile-dropdown" style="width: 250px;">
+            <div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:12px; background: #f8fafc;">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" style="width:38px; height:38px; border-radius:50%; object-fit:cover;">
+              <div style="overflow: hidden;">
+                <div style="font-weight:700; font-size:13.5px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Administrator</div>
+                <div style="font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">admin@eventflow.id</div>
+              </div>
+            </div>
+            <div class="dd-list">
+              <a href="{{ route('admin.dashboard') }}" class="dd-item">
+                <div class="dd-title">📊 Dashboard Utama</div>
+              </a>
+              <a href="{{ route('admin.events') }}" class="dd-item">
+                <div class="dd-title">📅 Kelola Event</div>
+              </a>
+              <a href="{{ route('admin.reports') }}" class="dd-item">
+                <div class="dd-title">📈 Laporan Penjualan</div>
+              </a>
+              <a href="{{ route('peserta.index') }}" class="dd-item" target="_blank">
+                <div class="dd-title">🌐 Web Peserta ↗</div>
+              </a>
+            </div>
+            <div class="dd-footer" style="background:#fff0f3; border-top:1px solid #ffe4e6;">
+              <a href="{{ route('admin.logout') }}" class="dd-action" style="color:#e11d48; display:flex; align-items:center; justify-content:center; gap:6px;">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                <span>Keluar (Logout)</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- Schedule Event Interactive Dropdown -->
         <div style="position: relative;">
-          <button type="button" class="tixia-btn-primary" onclick="toggleScheduleDropdown(event)">
+          <button type="button" class="tixia-btn-primary" onclick="toggleTopbarDropdown(event, 'schedule-dropdown-menu')">
             <span class="btn-icon">📅</span>
             <span>Schedule Event ({{ \App\Models\Event::count() }})</span>
             <span class="btn-arrow">▾</span>
@@ -142,16 +219,29 @@
 </div>
 
 <script>
-function toggleScheduleDropdown(e) {
+function toggleTopbarDropdown(e, dropdownId) {
   e.stopPropagation();
-  const dd = document.getElementById('schedule-dropdown-menu');
-  if (dd) dd.classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-  const dd = document.getElementById('schedule-dropdown-menu');
-  if (dd && dd.classList.contains('open') && !dd.contains(e.target)) {
-    dd.classList.remove('open');
+  const targetDd = document.getElementById(dropdownId);
+  const allDropdowns = document.querySelectorAll('.tixia-dropdown-menu');
+
+  allDropdowns.forEach(dd => {
+    if (dd.id !== dropdownId) {
+      dd.classList.remove('open');
+    }
+  });
+
+  if (targetDd) {
+    targetDd.classList.toggle('open');
   }
+}
+
+document.addEventListener('click', function(e) {
+  const allDropdowns = document.querySelectorAll('.tixia-dropdown-menu');
+  allDropdowns.forEach(dd => {
+    if (dd.classList.contains('open') && !dd.contains(e.target)) {
+      dd.classList.remove('open');
+    }
+  });
 });
 </script>
 @endsection
