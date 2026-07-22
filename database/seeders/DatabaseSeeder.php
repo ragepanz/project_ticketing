@@ -10,8 +10,28 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(
-            ['email' => 'admin@eventflow.id'],
-            ['name' => 'Super Administrator', 'password' => 'admin123', 'role' => 'superadmin'],
+            ['email' => 'ivan@superadmin.com'],
+            ['name' => 'Ivan Superadmin', 'password' => 'admin123', 'role' => 'superadmin'],
+        );
+
+        User::firstOrCreate(
+            ['email' => 'angga@superadmin.com'],
+            ['name' => 'Angga Superadmin', 'password' => 'admin123', 'role' => 'superadmin'],
+        );
+
+        User::firstOrCreate(
+            ['email' => 'meyze@superadmin.com'],
+            ['name' => 'Meyze Superadmin', 'password' => 'admin123', 'role' => 'superadmin'],
+        );
+
+        User::firstOrCreate(
+            ['email' => 'sari@eventflow.id'],
+            ['name' => 'Sari', 'password' => 'admin123', 'role' => 'admin'],
+        );
+
+        User::firstOrCreate(
+            ['email' => 'jaja@eventflow.id'],
+            ['name' => 'Jaja', 'password' => 'admin123', 'role' => 'admin'],
         );
 
         User::firstOrCreate(
@@ -22,11 +42,6 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'rizky@eventflow.id'],
             ['name' => 'Rizky', 'password' => 'admin123', 'role' => 'admin'],
-        );
-
-        User::firstOrCreate(
-            ['email' => 'sari@eventflow.id'],
-            ['name' => 'Sari', 'password' => 'admin123', 'role' => 'admin'],
         );
 
         User::firstOrCreate(
