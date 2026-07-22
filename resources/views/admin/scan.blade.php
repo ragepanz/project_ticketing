@@ -33,6 +33,9 @@
   </div>
 </div>
 
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
 <script>
 let scanningCode = '{{ request('code') }}';
 
@@ -51,7 +54,15 @@ function processScan() {
   const code = (input.value || '').trim();
   if (!code) return;
 
+  const btn = document.querySelector('button[onclick="processScan()"]');
   const resultDiv = document.getElementById('scan-result');
+  if (btn) { btn.disabled = true; btn.textContent = 'Memproses...'; }
+
+  resultDiv.innerHTML = `
+    <div style="text-align:center;">
+      <div style="width:40px;height:40px;border:4px solid #e2e8f0;border-top:4px solid #383be5;border-radius:50%;margin:0 auto 16px;animation:spin 0.8s linear infinite;"></div>
+      <div style="color:#64748b;font-size:14px;">Memeriksa tiket...</div>
+    </div>`;
 
   fetch('{{ route('admin.scan.process') }}', {
     method: 'POST',
@@ -71,6 +82,7 @@ function processScan() {
           <div style="font-weight: 800; font-size: 18px; color: #ef4444;">Tiket Tidak Ditemukan</div>
           <div style="color: #64748b; font-size: 13px; margin-top: 6px;">Kode: ${code}</div>
         </div>`;
+      if (btn) { btn.disabled = false; btn.textContent = 'Scan'; }
       return;
     }
 
@@ -100,10 +112,12 @@ function processScan() {
         </div>
       </div>`;
     showToast('Status peserta berhasil diperbarui ke Hadir!');
+    if (btn) { btn.disabled = false; btn.textContent = 'Scan'; }
   })
   .catch(() => {
     document.getElementById('scan-result').innerHTML =
       `<div style="text-align:center; color:#ef4444; font-weight:700;">Terjadi kesalahan. Silakan coba lagi.</div>`;
+    if (btn) { btn.disabled = false; btn.textContent = 'Scan'; }
   });
 }
 </script>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'EventFlow 2026 — Konferensi & Kajian Akbar')
+@section('title', 'Ticketin Prototipe')
 @section('body_class', 'dark-mode')
 
 @section('fullwidth')

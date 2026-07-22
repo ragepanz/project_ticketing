@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@yield('title', 'EventFlow 2026') — Platform Tiket Seminar & Kajian</title>
+<title>@yield('title', 'EventFlow 2026') — Nama Perusahaan</title>
 @stack('head')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
   <div class="prototype-switch-bar">
     <div class="brand-mini">
       <div class="mark">E</div>
-      <span class="txt">EventFlow 2026</span>
+      <span class="txt">Nama Perusahaan</span>
     </div>
     <div class="persona-switch">
       <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
