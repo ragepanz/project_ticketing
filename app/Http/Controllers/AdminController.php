@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class AdminController extends Controller
 {
@@ -22,13 +24,8 @@ class AdminController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            $request->session()->put('admin_logged_in', true);
-            return redirect()->route('admin.dashboard');
-        }
-
-        if ($request->email === 'admin@eventflow.id' && $request->password === 'admin123') {
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'admin'])
+            || Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'superadmin'])) {
             $request->session()->regenerate();
             $request->session()->put('admin_logged_in', true);
             return redirect()->route('admin.dashboard');
@@ -223,5 +220,122 @@ class AdminController extends Controller
         ];
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    public function users()
+    {
+        $users = User::whereIn('role', ['superadmin', 'admin'])->latest()->paginate(20);
+        return view('admin.users', compact('users'));
+    }
+
+    public function createUser()
+    {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403);
+        }
+        return view('admin.user-form');
+    }
+
+    public function storeUser(Request $request)
+    {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+            'role' => 'admin',
+        ]);
+
+        return redirect()->route('admin.users')->with('success', 'Admin berhasil ditambahkan.');
+    }
+
+    public function editUser(User $user)
+    {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403);
+        }
+        if ($user->role === 'superadmin') {
+            abort(403, 'Tidak dapat mengedit superadmin lain.');
+        }
+        return view('admin.user-form', compact('user'));
+    }
+
+    public function updateUser(Request $request, User $user)
+    {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403);
+        }
+        if ($user->role === 'superadmin') {
+            abort(403, 'Tidak dapat mengedit superadmin lain.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6',
+        ]);
+
+        $data = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = $validated['password'];
+        }
+
+        $user->update($data);
+
+        return redirect()->route('admin.users')->with('success', 'Admin berhasil diperbarui.');
+    }
+
+    public function destroyUser(User $user)
+    {
+        if (Auth::user()->role !== 'superadmin') {
+            abort(403);
+        }
+        if ($user->role === 'superadmin') {
+            abort(403, 'Tidak dapat menghapus superadmin.');
+        }
+
+        if ($user->id === Auth::id()) {
+            return back()->withErrors(['error' => 'Tidak dapat menghapus akun sendiri.']);
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.users')->with('success', 'Admin berhasil dihapus.');
+    }
+
+    public function passwordForm()
+    {
+        return view('admin.password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($validated['current_password'], $user->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini salah.']);
+        }
+
+        $user->update(['password' => $validated['new_password']]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Password berhasil diubah.');
     }
 }

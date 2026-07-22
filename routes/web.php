@@ -35,5 +35,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/scan/process', [AdminController::class, 'processScan'])->name('scan.process');
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::get('/export-csv', [AdminController::class, 'exportCsv'])->name('export-csv');
+
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
+        Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+        Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+        Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
+        Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
+
+        Route::get('/password', [AdminController::class, 'passwordForm'])->name('password.form');
+        Route::put('/password', [AdminController::class, 'updatePassword'])->name('password.update');
     });
 });
