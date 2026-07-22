@@ -19,6 +19,18 @@ Route::prefix('peserta')->name('peserta.')->group(function () {
     Route::get('/{event}/tiket', [PesertaController::class, 'ticket'])->name('ticket');
 });
 
+Route::prefix('client')->name('client.')->group(function () {
+    Route::get('/login', [\App\Http\Controllers\ClientController::class, 'login'])->name('login');
+    Route::post('/login', [\App\Http\Controllers\ClientController::class, 'authenticate'])->name('authenticate')->middleware('throttle:5,1');
+    Route::get('/register', [\App\Http\Controllers\ClientController::class, 'register'])->name('register');
+    Route::post('/register', [\App\Http\Controllers\ClientController::class, 'storeRegister'])->name('store-register')->middleware('throttle:3,1');
+    Route::get('/logout', [\App\Http\Controllers\ClientController::class, 'logout'])->name('logout');
+
+    Route::middleware('client.auth')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\ClientController::class, 'dashboard'])->name('dashboard');
+    });
+});
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('login');
     Route::post('/login', [AdminController::class, 'authenticate'])->name('authenticate')->middleware('throttle:5,1');
