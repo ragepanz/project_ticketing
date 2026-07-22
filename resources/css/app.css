@@ -731,10 +731,15 @@ a {
 
 /* Event Sessions Grid Cards */
 .sessions-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   margin-top: 24px;
+}
+.session-card {
+  width: 320px;
+  flex-shrink: 0;
 }
 .session-card {
   background: rgba(15, 23, 42, 0.6);
@@ -1422,7 +1427,7 @@ a {
   .bento-grid { grid-template-columns: 1fr; }
   .bento-item.span-2, .bento-item.span-3 { grid-column: span 1; }
   .bento-hero-title { font-size: 38px; }
-  .sessions-list { grid-template-columns: 1fr; }
+  .session-card { width: 100%; max-width: 400px; }
 }
 
 /* ==========================================
