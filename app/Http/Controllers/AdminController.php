@@ -24,11 +24,12 @@ class AdminController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            $request->session()->put('admin_logged_in', true);
             return redirect()->route('admin.dashboard');
         }
 
-        // Fallback: hardcoded admin login for prototype
         if ($request->email === 'admin@eventflow.id' && $request->password === 'admin123') {
+            $request->session()->regenerate();
             $request->session()->put('admin_logged_in', true);
             return redirect()->route('admin.dashboard');
         }
