@@ -29,8 +29,8 @@ EventFlow & Tixia adalah platform pendaftaran tiket seminar, kajian akbar, dan k
 | Role | Akses |
 |---|---|
 | Superadmin | Full akses dashboard + kelola admin (tambah/edit/hapus admin lain) |
-| Admin | Akses dashboard, tidak bisa kelola admin lain |
-| Client | (Public guest, tidak login) |
+| Admin | Akses dashboard (CRUD event, scan QR, laporan), tidak bisa kelola admin lain |
+| Client | Penyelenggara event / Klien (mempunyai login, register, dan dashboard client) |
 
 ---
 
@@ -85,25 +85,32 @@ php artisan serve
 ```
 Akses aplikasi melalui browser:
 - Web Peserta: `http://127.0.0.1:8000/peserta`
+- Login Client: `http://127.0.0.1:8000/client/login`
 - Panel Admin: `http://127.0.0.1:8000/admin/login`
 
 ---
 
-## Kredensial Akun
+## Kredensial Akun (Default Demo)
 
 ### Superadmin
-| Field | Kredensial |
-|---|---|
-| URL Login | `/admin/login` |
-| Email | `admin@eventflow.id` |
-| Password | `admin123` |
+| Nama | Email | Password |
+|---|---|---|
+| Ivan Superadmin | `ivan@superadmin.com` | `admin123` |
+| Angga Superadmin | `angga@superadmin.com` | `admin123` |
+| Meyze Superadmin | `meyze@superadmin.com` | `admin123` |
 
 ### Admin (dikelola oleh superadmin)
 | Nama | Email | Password |
 |---|---|---|
-| Fajri | fajri@eventflow.id | admin123 |
-| Rizky | rizky@eventflow.id | admin123 |
-| Sari | sari@eventflow.id | admin123 |
+| Sari | `sari@eventflow.id` | `admin123` |
+| Jaja | `jaja@eventflow.id` | `admin123` |
+| Fajri | `fajri@eventflow.id` | `admin123` |
+| Rizky | `rizky@eventflow.id` | `admin123` |
+
+### Client (Penyelenggara Event)
+| Nama | Email | Password |
+|---|---|---|
+| Ahmad Client | `client@eventflow.id` | `client123` |
 
 ---
 
