@@ -24,11 +24,18 @@
         <span class="nav-txt">Dashboard</span>
       </a>
 
+      @php
+        $eventCount = \App\Models\Event::count();
+        $pendingCount = \App\Models\Participant::where('status', '!=', 'lunas')->count();
+        $uncheckedCount = \App\Models\Participant::where('checked_in', false)->count();
+        $pendingPaymentCount = \App\Models\Payment::where('status', '!=', 'lunas')->count();
+      @endphp
       <a href="{{ route('admin.events') }}" class="tixia-nav-item {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
         <span class="nav-ico">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         </span>
         <span class="nav-txt">Kelola Event</span>
+        @if($eventCount > 0)<span class="nav-badge nav-badge-blue">{{ $eventCount }}</span>@endif
       </a>
 
       <a href="{{ route('admin.participants') }}" class="tixia-nav-item {{ request()->routeIs('admin.participants*') ? 'active' : '' }}">
@@ -36,6 +43,7 @@
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
         </span>
         <span class="nav-txt">Data Peserta</span>
+        @if($pendingCount > 0)<span class="nav-badge nav-badge-red">{{ $pendingCount }}</span>@endif
       </a>
 
       <a href="{{ route('admin.scan') }}" class="tixia-nav-item {{ request()->routeIs('admin.scan*') ? 'active' : '' }}">
@@ -43,6 +51,7 @@
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
         </span>
         <span class="nav-txt">Scan QR Check-in</span>
+        @if($uncheckedCount > 0)<span class="nav-badge nav-badge-red">{{ $uncheckedCount }}</span>@endif
       </a>
 
       <a href="{{ route('admin.reports') }}" class="tixia-nav-item {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
@@ -50,6 +59,7 @@
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </span>
         <span class="nav-txt">Laporan & Analytics</span>
+        @if($pendingPaymentCount > 0)<span class="nav-badge nav-badge-red">{{ $pendingPaymentCount }}</span>@endif
       </a>
     </nav>
 
@@ -92,7 +102,34 @@
           <input type="text" name="search" placeholder="Search here" value="{{ request('search') }}" class="tixia-search-input">
         </form>
 
+        <!-- Notification Bell -->
+        <div style="position: relative;">
+          <button type="button" class="tixia-icon-btn" title="Notifikasi" onclick="toggleTopbarDropdown(event, 'notif-dropdown')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            @if($pendingCount > 0)<span class="nav-badge nav-badge-red" style="position:absolute;top:4px;right:4px;width:18px;height:18px;font-size:10px;line-height:18px;">{{ $pendingCount }}</span>@endif
+          </button>
 
+          <div class="tixia-dropdown-menu" id="notif-dropdown">
+            <div class="dd-header">Notifikasi</div>
+            <div class="dd-list">
+              <a href="{{ route('admin.participants') }}" class="dd-item">
+                <div class="dd-title">{{ $pendingCount }} Peserta Menunggu Pembayaran</div>
+                <div class="dd-meta">Peserta dengan status pending perlu diverifikasi.</div>
+              </a>
+              <a href="{{ route('admin.scan') }}" class="dd-item">
+                <div class="dd-title">{{ $uncheckedCount }} Peserta Belum Check-in</div>
+                <div class="dd-meta">Peserta yang terdaftar namun belum melakukan check-in.</div>
+              </a>
+              <a href="{{ route('admin.reports') }}" class="dd-item">
+                <div class="dd-title">{{ $pendingPaymentCount }} Pembayaran Tertunda</div>
+                <div class="dd-meta">Pembayaran yang masih menunggu konfirmasi.</div>
+              </a>
+            </div>
+          </div>
+        </div>
 
         <!-- User Profile Avatar Dropdown -->
         <div style="position: relative;">

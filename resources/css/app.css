@@ -968,8 +968,33 @@ a {
   font-size: 16px;
 }
 
+.tixia-nav-item {
+  position: relative;
+}
 .tixia-nav-item.active .nav-ico {
   color: #383be5;
+}
+
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  margin-left: auto;
+}
+.nav-badge-red {
+  background: #ef4444;
+  color: #ffffff;
+}
+.nav-badge-blue {
+  background: #6366f1;
+  color: #ffffff;
 }
 
 .tixia-nav-item .nav-txt {
