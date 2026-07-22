@@ -54,6 +54,13 @@
         @if($uncheckedCount > 0)<span class="nav-badge nav-badge-red">{{ $uncheckedCount }}</span>@endif
       </a>
 
+      <a href="{{ route('admin.users') }}" class="tixia-nav-item {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+        <span class="nav-ico">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </span>
+        <span class="nav-txt">Kelola Admin</span>
+      </a>
+
       <a href="{{ route('admin.reports') }}" class="tixia-nav-item {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
         <span class="nav-ico">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -78,7 +85,7 @@
         <span class="nav-txt">Logout</span>
       </a>
       <div class="tixia-copyright">
-        Tixia Ticketing Admin Dashboard<br>© 2026 All Rights Reserved
+        Prototipe Admin Dashboard<br>© 2026 All Rights Reserved
       </div>
     </div>
   </aside>
@@ -139,10 +146,12 @@
 
           <div class="tixia-dropdown-menu" id="profile-dropdown" style="width: 250px;">
             <div style="padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:12px; background: #f8fafc;">
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" style="width:38px; height:38px; border-radius:50%; object-fit:cover;">
+              <div style="width:38px; height:38px; border-radius:50%; background: linear-gradient(135deg, #383be5, #6366f1); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0;">
+                {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
+              </div>
               <div style="overflow: hidden;">
-                <div style="font-weight:700; font-size:13.5px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Administrator</div>
-                <div style="font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">admin@eventflow.id</div>
+                <div style="font-weight:700; font-size:13.5px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ Auth::user()->name ?? 'Administrator' }}</div>
+                <div style="font-size:11.5px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ Auth::user()->email ?? 'admin@eventflow.id' }}</div>
               </div>
             </div>
             <div class="dd-list">
@@ -154,6 +163,9 @@
               </a>
               <a href="{{ route('admin.reports') }}" class="dd-item">
                 <div class="dd-title">Laporan Penjualan</div>
+              </a>
+              <a href="{{ route('admin.password.form') }}" class="dd-item">
+                <div class="dd-title">Ubah Password</div>
               </a>
               <a href="{{ route('peserta.index') }}" class="dd-item" target="_blank">
                 <div class="dd-title">Web Peserta ↗</div>
