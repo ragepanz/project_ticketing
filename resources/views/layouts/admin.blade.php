@@ -12,7 +12,7 @@
           <path d="M9 9H15M9 15H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </div>
-      <span class="tixia-brand-name">Tixia<span class="tixia-dot">.</span></span>
+      <span class="tixia-brand-name">EventFlow<span class="tixia-dot">.</span></span>
     </div>
 
     <!-- Main Nav Menu -->

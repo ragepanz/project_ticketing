@@ -9,7 +9,11 @@
   <!-- Top Bar -->
   <header class="admin-login-header">
     <a href="{{ route('peserta.index') }}" class="admin-login-brand">
-      <div class="brand-logo">E</div>
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 5V7M15 11V13M15 17V19M5 5H19C20.1 5 21 5.9 21 7V9.5C19.9 9.5 19 10.4 19 11.5C19 12.6 19.9 13.5 21 13.5V17C21 18.1 20.1 19 19 19H5C3.9 19 3 18.1 3 17V13.5C4.1 13.5 5 12.6 5 11.5C5 10.4 4.1 9.5 3 9.5V7C3 5.9 3.9 5 5 5Z"/>
+        </svg>
+      </div>
       <span class="brand-text">EventFlow</span>
       <span class="brand-badge">ADMIN PORTAL</span>
     </a>

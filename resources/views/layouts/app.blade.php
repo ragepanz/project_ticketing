@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@yield('title', 'EventFlow 2026') — Nama Perusahaan</title>
+<title>@yield('title', 'EventFlow 2026') — EventFlow Ticketing</title>
 @stack('head')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +17,10 @@
   <!-- Public User Top Bar -->
   <div class="prototype-switch-bar">
     <div class="brand-mini">
-      <div class="mark">E</div>
-      <span class="txt">Nama Perusahaan</span>
+      <div class="mark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5V7M15 11V13M15 17V19M5 5H19C20.1 5 21 5.9 21 7V9.5C19.9 9.5 19 10.4 19 11.5C19 12.6 19.9 13.5 21 13.5V17C21 18.1 20.1 19 19 19H5C3.9 19 3 18.1 3 17V13.5C4.1 13.5 5 12.6 5 11.5C5 10.4 4.1 9.5 3 9.5V7C3 5.9 3.9 5 5 5Z"/></svg>
+      </div>
+      <span class="txt">EventFlow</span>
     </div>
     <div class="persona-switch">
       <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
@@ -33,7 +35,9 @@
   <div class="topbar">
     <div class="brand">
       <a href="{{ route('peserta.index') }}" style="display:flex; align-items:center; gap:10px;">
-        <div class="mark">E</div>
+        <div class="mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5V7M15 11V13M15 17V19M5 5H19C20.1 5 21 5.9 21 7V9.5C19.9 9.5 19 10.4 19 11.5C19 12.6 19.9 13.5 21 13.5V17C21 18.1 20.1 19 19 19H5C3.9 19 3 18.1 3 17V13.5C4.1 13.5 5 12.6 5 11.5C5 10.4 4.1 9.5 3 9.5V7C3 5.9 3.9 5 5 5Z"/></svg>
+        </div>
         <div class="name">EventFlow</div>
         <div class="tag">Pendaftaran Tiket Online</div>
       </a>
