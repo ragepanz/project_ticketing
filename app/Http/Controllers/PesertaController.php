@@ -64,9 +64,17 @@ class PesertaController extends Controller
             return redirect()->route('peserta.form', $event);
         }
 
+        $registeredCount = Participant::where('event_id', $event->id)
+            ->where('status', 'lunas')
+            ->count();
+        if ($registeredCount >= $event->quota) {
+            return redirect()->route('peserta.detail', $event)
+                ->with('error', 'Maaf, kuota event ini sudah penuh.');
+        }
+
         $trxId = 'TRX-' . strtoupper(substr(uniqid(), -5));
 
-        Participant::create([
+        $participant = Participant::create([
             'trx_id' => $trxId,
             'name' => $data['name'],
             'email' => $data['email'],
@@ -75,6 +83,12 @@ class PesertaController extends Controller
             'event_id' => $event->id,
             'status' => 'lunas',
             'checked_in' => false,
+        ]);
+
+        $participant->payments()->create([
+            'amount' => $event->price,
+            'status' => 'lunas',
+            'payment_date' => now(),
         ]);
 
         $request->session()->forget(['peserta_form', 'peserta_event_id']);
@@ -107,7 +121,7 @@ class PesertaController extends Controller
             'query' => 'required|string',
         ]);
 
-        $q = trim($request->input('query'));
+        $q = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], trim($request->input('query')));
 
         $participant = Participant::where('trx_id', 'LIKE', "%{$q}%")
             ->orWhere('email', 'LIKE', "%{$q}%")

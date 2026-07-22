@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Participant;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,9 +55,7 @@ class AdminController extends Controller
 
         $recentParticipants = Participant::with('event')->latest()->take(10)->get();
         
-        $totalRevenue = Participant::where('participants.status', 'lunas')
-            ->join('events', 'participants.event_id', '=', 'events.id')
-            ->sum('events.price');
+        $totalRevenue = Payment::where('status', 'lunas')->sum('amount');
 
         return view('admin.dashboard', compact('events', 'totalPeserta', 'totalHadir', 'totalBelum', 'checkinPercent', 'recentParticipants', 'totalRevenue'));
     }
@@ -133,14 +132,15 @@ class AdminController extends Controller
         $query = Participant::with('event');
 
         if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('trx_id', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+            $safe = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $search);
+            $query->where(function ($q) use ($safe) {
+                $q->where('name', 'like', "%{$safe}%")
+                  ->orWhere('trx_id', 'like', "%{$safe}%")
+                  ->orWhere('email', 'like', "%{$safe}%");
             });
         }
 
-        $participants = $query->latest()->get();
+        $participants = $query->latest()->paginate(20);
 
         return view('admin.participants', compact('participants', 'search'));
     }
@@ -185,7 +185,7 @@ class AdminController extends Controller
         $totalPeserta = Participant::count();
         $totalHadir = Participant::where('checked_in', true)->count();
         $totalBelum = $totalPeserta - $totalHadir;
-        $lunas = Participant::where('status', 'lunas')->count();
+        $lunas = Payment::where('status', 'lunas')->count();
         $pending = $totalPeserta - $lunas;
 
         return view('admin.reports', compact('events', 'totalPeserta', 'totalHadir', 'totalBelum', 'lunas', 'pending'));
@@ -193,25 +193,25 @@ class AdminController extends Controller
 
     public function exportCsv()
     {
-        $participants = Participant::with('event')->get();
-
-        $callback = function () use ($participants) {
+        $callback = function () {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['Nama', 'Email', 'WhatsApp', 'Instansi', 'Event', 'Kode Tiket', 'Status Bayar', 'Check-in', 'Waktu Check-in']);
 
-            foreach ($participants as $p) {
-                fputcsv($file, [
-                    $p->name,
-                    $p->email,
-                    $p->phone,
-                    $p->instansi ?? '-',
-                    $p->event->title ?? '-',
-                    $p->trx_id,
-                    $p->status,
-                    $p->checked_in ? 'Hadir' : 'Belum',
-                    $p->checkin_time ? $p->checkin_time->format('d M Y, H:i') : '-',
-                ]);
-            }
+            Participant::with('event')->chunk(200, function ($participants) use ($file) {
+                foreach ($participants as $p) {
+                    fputcsv($file, [
+                        $p->name,
+                        $p->email,
+                        $p->phone,
+                        $p->instansi ?? '-',
+                        $p->event->title ?? '-',
+                        $p->trx_id,
+                        $p->status,
+                        $p->checked_in ? 'Hadir' : 'Belum',
+                        $p->checkin_time ? $p->checkin_time->format('d M Y, H:i') : '-',
+                    ]);
+                }
+            });
 
             fclose($file);
         };
