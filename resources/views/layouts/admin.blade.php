@@ -93,7 +93,10 @@
         <!-- Notification Bell Dropdown -->
         <div style="position: relative;">
           <button type="button" class="tixia-icon-btn" title="Notifikasi Sistem" onclick="toggleTopbarDropdown(event, 'notif-dropdown')">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 17H3L5 15V9a7 7 0 1114 0v6l2 2h-6m-6 0a3 3 0 006 0"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
             <span class="dot-badge yellow"></span>
           </button>
           
@@ -125,7 +128,9 @@
         <!-- Message/Chat Dropdown -->
         <div style="position: relative;">
           <button type="button" class="tixia-icon-btn" title="Pesan & Pertanyaan" onclick="toggleTopbarDropdown(event, 'msg-dropdown')">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
             <span class="dot-badge green"></span>
           </button>
 
