@@ -56,5 +56,10 @@
       </tbody>
     </table>
   </div>
+  @if ($participants->hasPages())
+  <div style="display: flex; justify-content: flex-end; padding: 16px 0 0; gap: 6px;">
+    {{ $participants->links() }}
+  </div>
+  @endif
 </div>
 @endsection

@@ -12,16 +12,16 @@ Route::prefix('peserta')->name('peserta.')->group(function () {
     Route::post('/cek-pesanan', [PesertaController::class, 'findOrder'])->name('find-order');
     Route::get('/{event}', [PesertaController::class, 'detail'])->name('detail');
     Route::get('/{event}/daftar', [PesertaController::class, 'form'])->name('form');
-    Route::post('/{event}/daftar', [PesertaController::class, 'storeForm'])->name('store-form');
+    Route::post('/{event}/daftar', [PesertaController::class, 'storeForm'])->name('store-form')->middleware('throttle:10,1');
     Route::get('/{event}/review', [PesertaController::class, 'review'])->name('review');
     Route::get('/{event}/bayar', [PesertaController::class, 'payment'])->name('payment');
-    Route::post('/{event}/confirm', [PesertaController::class, 'confirm'])->name('confirm');
+    Route::post('/{event}/confirm', [PesertaController::class, 'confirm'])->name('confirm')->middleware('throttle:5,1');
     Route::get('/{event}/tiket', [PesertaController::class, 'ticket'])->name('ticket');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('login');
-    Route::post('/login', [AdminController::class, 'authenticate'])->name('authenticate');
+    Route::post('/login', [AdminController::class, 'authenticate'])->name('authenticate')->middleware('throttle:5,1');
     Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
 
     Route::middleware('admin.auth')->group(function () {
