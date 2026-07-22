@@ -216,7 +216,7 @@
         </div>
       </div>
       @else
-      <a href="{{ route('peserta.detail', $event) }}" class="session-card">
+      <a href="{{ Auth::check() && Auth::user()->role === 'client' ? route('peserta.detail', $event) : route('client.login', ['redirect' => route('peserta.detail', $event)]) }}" class="session-card">
         <div class="session-card-image">
           <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
         </div>

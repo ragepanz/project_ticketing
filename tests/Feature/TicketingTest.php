@@ -38,6 +38,19 @@ class TicketingTest extends TestCase
         ]);
 
         $this->get('/peserta/' . $event->id)->assertStatus(200);
+
+        \App\Models\User::create([
+            'name' => 'Test Client',
+            'email' => 'testclient@example.com',
+            'password' => 'password',
+            'role' => 'client',
+        ]);
+
+        $this->post('/client/login', [
+            'email' => 'testclient@example.com',
+            'password' => 'password',
+        ])->assertRedirect(route('client.dashboard'));
+
         $this->get('/peserta/' . $event->id . '/daftar')->assertStatus(200);
 
         $postData = [

@@ -53,6 +53,7 @@
 
       <form method="POST" action="{{ route('client.authenticate') }}">
         @csrf
+        @if(request('redirect'))<input type="hidden" name="redirect" value="{{ request('redirect') }}">@endif
 
         <div class="admin-field-group">
           <label for="email">Alamat Email</label>

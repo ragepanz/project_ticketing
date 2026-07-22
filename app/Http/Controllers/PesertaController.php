@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PesertaController extends Controller
 {
@@ -22,6 +23,9 @@ class PesertaController extends Controller
 
     public function form(Request $request, Event $event)
     {
+        if (!Auth::check() || Auth::user()->role !== 'client') {
+            return redirect()->route('client.login', ['redirect' => route('peserta.form', $event)]);
+        }
         return view('peserta.form', compact('event'));
     }
 

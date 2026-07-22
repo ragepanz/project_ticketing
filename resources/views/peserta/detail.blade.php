@@ -39,7 +39,7 @@
       @if($full)
         <span class="btn btn-primary" style="opacity:0.5; cursor:not-allowed; background:#64748b; box-shadow:none;">Kuota Penuh</span>
       @else
-        <a href="{{ route('peserta.form', $event) }}" class="btn btn-primary">Beli Tiket</a>
+        <a href="{{ Auth::check() && Auth::user()->role === 'client' ? route('peserta.form', $event) : route('client.login', ['redirect' => route('peserta.form', $event)]) }}" class="btn btn-primary">Beli Tiket</a>
       @endif
     </div>
   </div>
