@@ -23,14 +23,14 @@
     <div class="sub">{{ $event->desc }}</div>
 
     @if($event->speaker)
-    <div class="review-row"><div class="k">Pemateri Utama</div><div class="v" style="color:var(--bento-emerald); font-weight:700;">🎙️ {{ $event->speaker }}</div></div>
+    <div class="review-row"><div class="k">Pemateri Utama</div><div class="v" style="color:var(--bento-emerald); font-weight:700;">{{ $event->speaker }}</div></div>
     @endif
-    <div class="review-row"><div class="k">Tanggal Acara</div><div class="v">📅 {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</div></div>
+    <div class="review-row"><div class="k">Tanggal Acara</div><div class="v">{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</div></div>
     @if($event->time_slot)
-    <div class="review-row"><div class="k">Waktu / Jam Sesi</div><div class="v" style="color:var(--bento-cyan); font-weight:700;">⏱️ {{ $event->time_slot }}</div></div>
+    <div class="review-row"><div class="k">Waktu / Jam Sesi</div><div class="v" style="color:var(--bento-cyan); font-weight:700;">{{ $event->time_slot }}</div></div>
     @endif
-    <div class="review-row"><div class="k">Lokasi</div><div class="v">📍 {{ $event->location }}</div></div>
-    <div class="review-row"><div class="k">Kuota Tersedia</div><div class="v">⚡ {{ $event->quota }} peserta</div></div>
+    <div class="review-row"><div class="k">Lokasi</div><div class="v">{{ $event->location }}</div></div>
+    <div class="review-row"><div class="k">Kuota Tersedia</div><div class="v">{{ $event->quota }} peserta</div></div>
     <div class="review-row"><div class="k">Biaya Registrasi</div><div class="v" style="color:var(--bento-emerald); font-size:16px; font-weight:800;">{{ $event->rupiah }}</div></div>
 
     <div class="btn-row">

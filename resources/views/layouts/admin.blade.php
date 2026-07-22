@@ -56,7 +56,9 @@
     <!-- Sidebar Bottom -->
     <div class="tixia-sidebar-bottom">
       <a href="{{ route('peserta.index') }}" class="tixia-nav-item" target="_blank">
-        <span class="nav-ico">🌐</span>
+        <span class="nav-ico">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        </span>
         <span class="nav-txt">Web Peserta ↗</span>
       </a>
       <a href="{{ route('admin.logout') }}" class="tixia-nav-item logout">
@@ -107,15 +109,15 @@
             </div>
             <div class="dd-list">
               <a href="{{ route('admin.participants') }}" class="dd-item">
-                <div class="dd-title">🎟️ Pendaftaran Baru #TRX-8291</div>
+                <div class="dd-title">Pendaftaran Baru #TRX-8291</div>
                 <div class="dd-meta">Budi Santoso memesan 1 tiket Seminar — 4m lalu</div>
               </a>
               <a href="{{ route('admin.scan') }}" class="dd-item">
-                <div class="dd-title">📷 Presensi QR Check-in</div>
+                <div class="dd-title">Presensi QR Check-in</div>
                 <div class="dd-meta">Siti Rahma telah berhasil verified check-in — 18m lalu</div>
               </a>
               <a href="{{ route('admin.reports') }}" class="dd-item">
-                <div class="dd-title">📈 Milestone Kuota Event</div>
+                <div class="dd-title">Milestone Kuota Event</div>
                 <div class="dd-meta">Event flow tiket terjual melebihi 85% — 1j lalu</div>
               </a>
             </div>
@@ -138,11 +140,11 @@
             <div class="dd-header">Pesan Peserta</div>
             <div class="dd-list">
               <a href="{{ route('admin.participants') }}" class="dd-item">
-                <div class="dd-title">💬 Ahmad Rizky</div>
+                <div class="dd-title">Ahmad Rizky</div>
                 <div class="dd-meta">"Halo min, apakah invoice bisa dikirim ulang?" — 12m lalu</div>
               </a>
               <a href="{{ route('admin.participants') }}" class="dd-item">
-                <div class="dd-title">💬 Maya Putri</div>
+                <div class="dd-title">Maya Putri</div>
                 <div class="dd-meta">"Konfirmasi pembayaran QRIS sudah terverifikasi?" — 42m lalu</div>
               </a>
             </div>
@@ -168,16 +170,16 @@
             </div>
             <div class="dd-list">
               <a href="{{ route('admin.dashboard') }}" class="dd-item">
-                <div class="dd-title">📊 Dashboard Utama</div>
+                <div class="dd-title">Dashboard Utama</div>
               </a>
               <a href="{{ route('admin.events') }}" class="dd-item">
-                <div class="dd-title">📅 Kelola Event</div>
+                <div class="dd-title">Kelola Event</div>
               </a>
               <a href="{{ route('admin.reports') }}" class="dd-item">
-                <div class="dd-title">📈 Laporan Penjualan</div>
+                <div class="dd-title">Laporan Penjualan</div>
               </a>
               <a href="{{ route('peserta.index') }}" class="dd-item" target="_blank">
-                <div class="dd-title">🌐 Web Peserta ↗</div>
+                <div class="dd-title">Web Peserta ↗</div>
               </a>
             </div>
             <div class="dd-footer" style="background:#fff0f3; border-top:1px solid #ffe4e6;">
@@ -192,7 +194,9 @@
         <!-- Schedule Event Interactive Dropdown -->
         <div style="position: relative;">
           <button type="button" class="tixia-btn-primary" onclick="toggleTopbarDropdown(event, 'schedule-dropdown-menu')">
-            <span class="btn-icon">📅</span>
+            <span class="btn-icon">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </span>
             <span>Schedule Event ({{ \App\Models\Event::count() }})</span>
             <span class="btn-arrow">▾</span>
           </button>
@@ -203,7 +207,7 @@
               @forelse(\App\Models\Event::latest()->take(5)->get() as $ev)
               <a href="{{ route('admin.events') }}" class="dd-item">
                 <div class="dd-title">{{ $ev->title }}</div>
-                <div class="dd-meta">📅 {{ \Carbon\Carbon::parse($ev->date)->format('d M Y') }} · 📍 {{ $ev->location }}</div>
+                <div class="dd-meta">{{ \Carbon\Carbon::parse($ev->date)->format('d M Y') }} · {{ $ev->location }}</div>
               </a>
               @empty
               <div class="dd-item" style="color: #94a3b8; font-size: 13px;">Belum ada event diselenggarakan.</div>

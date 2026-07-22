@@ -19,7 +19,7 @@
 
     <div class="review-row"><div class="k">Event / Sesi</div><div class="v">{{ $event->title }}</div></div>
     @if($event->time_slot)
-    <div class="review-row"><div class="k">Waktu / Jam Sesi</div><div class="v" style="color:var(--bento-cyan); font-weight:700;">⏱️ {{ $event->time_slot }}</div></div>
+    <div class="review-row"><div class="k">Waktu / Jam Sesi</div><div class="v" style="color:var(--bento-cyan); font-weight:700;">{{ $event->time_slot }}</div></div>
     @endif
     <div class="review-row"><div class="k">Nama Pemesan</div><div class="v">{{ $data['name'] }}</div></div>
     <div class="review-row"><div class="k">Email</div><div class="v">{{ $data['email'] }}</div></div>

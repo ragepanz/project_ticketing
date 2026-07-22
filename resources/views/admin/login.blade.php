@@ -94,7 +94,7 @@
           <strong>admin@eventflow.id</strong> / <strong>admin123</strong>
         </div>
         <button type="button" class="btn-fill-demo" onclick="fillDemoCredentials()">
-          ⚡ Auto Fill
+          Auto Fill
         </button>
       </div>
     </div>
@@ -102,7 +102,7 @@
 
   <!-- Footer -->
   <footer class="admin-login-footer">
-    🔒 EventFlow Secured Admin Portal &copy; {{ date('Y') }} All Rights Reserved.
+    EventFlow Secured Admin Portal &copy; {{ date('Y') }} All Rights Reserved.
   </footer>
 </div>
 @endsection

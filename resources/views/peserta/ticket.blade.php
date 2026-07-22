@@ -24,8 +24,8 @@
     <div class="ticket">
       <div class="ticket-top">
         <div class="ev">{{ $event->title }}</div>
-        <div class="dt">📅 {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }} @if($event->time_slot) · ⏱️ {{ $event->time_slot }} @endif · 📍 {{ $event->location }}</div>
-        @if($event->speaker)<div style="font-size:12.5px; color:rgba(255,255,255,0.7); margin-top:4px;">🎙️ {{ $event->speaker }}</div>@endif
+        <div class="dt">{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }} @if($event->time_slot) · {{ $event->time_slot }} @endif · {{ $event->location }}</div>
+        @if($event->speaker)<div style="font-size:12.5px; color:rgba(255,255,255,0.7); margin-top:4px;">{{ $event->speaker }}</div>@endif
       </div>
       <div class="stub-divider"></div>
       <div class="ticket-mid">
@@ -36,9 +36,9 @@
         </div>
       </div>
       <div class="ticket-bottom">
-        <div class="chip">📄 Konfirmasi Pembayaran</div>
-        <div class="chip">🔳 QR Code Check-in</div>
-        <div class="chip">💬 Link Grup WhatsApp</div>
+        <div class="chip">Konfirmasi Pembayaran</div>
+        <div class="chip">QR Code Check-in</div>
+        <div class="chip">Link Grup WhatsApp</div>
       </div>
     </div>
 

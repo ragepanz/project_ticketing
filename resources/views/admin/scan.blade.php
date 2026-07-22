@@ -15,7 +15,7 @@
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
     <div>
       <div style="width: 100%; aspect-ratio: 1; max-width: 280px; margin: 0 auto; border: 2px dashed #cbd5e1; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 15px; background: #f8fafc; font-weight: 600; text-align: center; padding: 20px;">
-        📷 Arahkan kamera ke QR tiket peserta
+        Arahkan kamera ke QR tiket peserta
       </div>
 
       <div style="display: flex; gap: 10px; margin-top: 20px; max-width: 380px; margin-left: auto; margin-right: auto;">
@@ -78,7 +78,9 @@ function processScan() {
     if (data.error) {
       resultDiv.innerHTML = `
         <div style="text-align:center;">
-          <div style="font-size: 40px; margin-bottom: 8px;">⚠️</div>
+          <div style="width:48px;height:48px;margin:0 auto 12px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 9l-6 6m0-6l6 6"/></svg>
+          </div>
           <div style="font-weight: 800; font-size: 18px; color: #ef4444;">Tiket Tidak Ditemukan</div>
           <div style="color: #64748b; font-size: 13px; margin-top: 6px;">Kode: ${code}</div>
         </div>`;
@@ -88,13 +90,15 @@ function processScan() {
 
     const p = data.participant;
     const already = data.already_checked;
-    const icon = already ? 'ℹ️' : '✅';
     const msg = already ? 'Sudah Check-in Sebelumnya' : 'Check-in Berhasil!';
     const color = already ? '#f59e0b' : '#16a34a';
+    const iconSvg = already
+      ? '<svg width=\"40\" height=\"40\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"#f59e0b\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 8v4m0 4h.01\"/></svg>'
+      : '<svg width=\"40\" height=\"40\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"#16a34a\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>';
 
     resultDiv.innerHTML = `
       <div style="text-align:center;">
-        <div style="font-size: 44px; margin-bottom: 8px;">${icon}</div>
+        <div style="width:56px;height:56px;margin:0 auto 12px;background:${already ? '#fffbeb' : '#f0fdf4'};border-radius:50%;display:flex;align-items:center;justify-content:center;">${iconSvg}</div>
         <div style="font-weight: 800; font-size: 20px; color: ${color};">${msg}</div>
         <div style="margin-top: 20px; text-align: left; background: #ffffff; padding: 18px; border-radius: 14px; border: 1px solid #e2e8f0;">
           <div style="display:flex; justify-space-between; margin-bottom: 8px; font-size: 14px;">

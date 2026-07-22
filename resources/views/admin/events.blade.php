@@ -38,13 +38,13 @@
           </td>
           <td>
             <div style="font-weight: 700; color: #1e293b; font-size: 14px;">{{ $event->title }}</div>
-            <div style="font-size: 12px; color: #383be5; font-weight: 600; margin-top: 2px;">🎙️ {{ $event->speaker ?? 'Pemateri Utama' }}</div>
+            <div style="font-size: 12px; color: #383be5; font-weight: 600; margin-top: 2px;">{{ $event->speaker ?? 'Pemateri Utama' }}</div>
           </td>
           <td style="font-weight: 600; color: #334155;">
-            <div>📅 {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</div>
-            <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">⏱️ {{ $event->time_slot ?? '10.00 WIB' }}</div>
+            <div>{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</div>
+            <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">{{ $event->time_slot ?? '10.00 WIB' }}</div>
           </td>
-          <td style="color: #64748b;">📍 {{ $event->location }}</td>
+          <td style="color: #64748b;">{{ $event->location }}</td>
           <td>
             <span class="tixia-pill-rev">
               {{ $event->rupiah }}
@@ -58,12 +58,12 @@
             <div style="display: flex; gap: 8px; justify-content: flex-end;">
               <button class="tixia-icon-btn" title="Edit Event" style="width: 34px; height: 34px;"
                 onclick="editEvent({{ $event->id }}, '{{ str_replace("'", "\'", $event->title) }}', '{{ str_replace("'", "\'", $event->speaker ?? '') }}', '{{ str_replace("'", "\'", $event->time_slot ?? '') }}', '{{ $event->date }}', '{{ str_replace("'", "\'", $event->location) }}', '{{ str_replace("'", "\'", $event->desc) }}', {{ $event->price }}, {{ $event->quota }}, '{{ str_replace("'", "\'", $event->image_url) }}')">
-                ✏️
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
               </button>
               <form method="POST" action="{{ route('admin.events.destroy', $event) }}" style="display:inline" onsubmit="return confirm('Hapus event ini?')">
                 @csrf @method('DELETE')
                 <button class="tixia-icon-btn" title="Hapus Event" style="width: 34px; height: 34px; color: #ef4444;">
-                  🗑️
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                 </button>
               </form>
             </div>
@@ -86,7 +86,9 @@
   <div class="modal-box" style="background: #ffffff; color: #1e293b; max-width: 760px;">
     <div class="modal-header" style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
       <div class="modal-header-left">
-        <div class="modal-header-icon" id="modal-icon" style="background: #eef2ff; color: #383be5;">📅</div>
+        <div class="modal-header-icon" id="modal-icon" style="background: #eef2ff; color: #383be5;">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        </div>
         <div class="modal-header-text">
           <h3 id="modal-title" style="color: #0f172a;">Tambah Event Baru</h3>
           <p id="modal-subtitle" style="color: #64748b;">Lengkapi informasi & poster foto event yang akan diselenggarakan</p>
@@ -139,7 +141,7 @@
 
           <!-- Photo Upload & URL Section -->
           <div class="field field-full" style="grid-column: 1 / -1; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
-            <label style="color: #0f172a; font-weight: 700; font-size: 13.5px; display: block; margin-bottom: 8px;">🖼️ Foto / Poster Event</label>
+            <label style="color: #0f172a; font-weight: 700; font-size: 13.5px; display: block; margin-bottom: 8px;">Foto / Poster Event</label>
             
             <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
               <!-- Preview thumbnail -->
@@ -203,7 +205,7 @@ function toggleModal() {
     document.getElementById('modal-title').textContent = 'Tambah Event Baru';
     document.getElementById('modal-subtitle').textContent = 'Lengkapi informasi & poster foto event yang akan diselenggarakan';
     document.getElementById('modal-submit').textContent = 'Simpan Event';
-    document.getElementById('modal-icon').textContent = '📅';
+    document.getElementById('modal-icon').innerHTML = '<svg width=\"20\" height=\"20\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"/></svg>';
     document.getElementById('image-preview').src = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
     document.getElementById('event-form').action = '{{ route('admin.events.store') }}';
   }
@@ -226,7 +228,7 @@ function editEvent(id, title, speaker, time_slot, date, location, desc, price, q
   document.getElementById('modal-title').textContent = 'Edit Event & Poster';
   document.getElementById('modal-subtitle').textContent = 'Perbarui informasi dan poster foto event';
   document.getElementById('modal-submit').textContent = 'Perbarui Event';
-  document.getElementById('modal-icon').textContent = '✏️';
+  document.getElementById('modal-icon').innerHTML = '<svg width=\"20\" height=\"20\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z\"/></svg>';
   document.getElementById('event-form').action = '{{ url('admin/events') }}/' + id;
   document.getElementById('form-method').value = 'PUT';
   toggleModal();

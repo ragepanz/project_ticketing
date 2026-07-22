@@ -24,7 +24,7 @@
     </div>
     <div class="persona-switch">
       <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
-      <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">🔍 Cek Tiket Saya</a>
+      <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket Saya</a>
     </div>
   </div>
   @endif
@@ -44,7 +44,7 @@
     </div>
     <div class="persona-switch">
       <a href="{{ route('peserta.index') }}" class="{{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
-      <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">🔍 Cek Tiket</a>
+      <a href="{{ route('peserta.search-order') }}" class="{{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket</a>
     </div>
   </div>
 

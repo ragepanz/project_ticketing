@@ -50,7 +50,7 @@
         </a>
 
         <a href="{{ route('peserta.search-order') }}" class="btn-bento-secondary">
-          <span>🔍 Cek Tiket Saya</span>
+          <span>Cek Tiket Saya</span>
         </a>
       </div>
     </div>
@@ -62,7 +62,7 @@
         <div class="stack-card main-card">
           <div class="card-header-badge">
             <span class="tag">SESI UTAMA</span>
-            <span class="quota-badge">⚡ Quota 500 Kursi</span>
+            <span class="quota-badge">Quota 500 Kursi</span>
           </div>
 
           <h3 style="font-size:22px; font-weight:800; color:#fff; margin-bottom:6px;">
@@ -74,7 +74,7 @@
           </p>
 
           <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px;">
-            <div style="font-size:12px; color:rgba(255,255,255,0.7);">📍 JICC Senayan, Jakarta</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.7);">JICC Senayan, Jakarta</div>
             <a href="#sessions" style="color:var(--bento-emerald); font-weight:700; font-size:13px;">Daftar Sesi →</a>
           </div>
         </div>
@@ -111,7 +111,9 @@
     <!-- Item 1: Speaker Spotlight (Span 2) -->
     <div class="bento-item span-2">
       <div>
-        <div class="icon-glow">🎙️</div>
+        <div class="icon-glow">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+      </div>
         <h3>Pemateri Terbaik & Berpengalaman</h3>
         <p>
           Menghadirkan narasumber utama berpengaruh untuk menyampaikan ilmu syar'i, kesehatan, dan inspirasi kehidupan dalam suasana yang khidmat di Jakarta International Convention Center.
@@ -128,7 +130,9 @@
     <!-- Item 2: Lokasi & Akses -->
     <div class="bento-item">
       <div>
-        <div class="icon-glow">📍</div>
+        <div class="icon-glow">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
         <h3>Lokasi Strategis</h3>
         <p>Jakarta International Convention Center (JICC) Senayan. Akses mudah dengan transportasi publik & fasilitas lengkap.</p>
       </div>
@@ -138,7 +142,9 @@
     <!-- Item 3: Parallel Fairs -->
     <div class="bento-item">
       <div>
-        <div class="icon-glow">🎪</div>
+        <div class="icon-glow">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11m16-11v11M8 14v.01M12 14v.01M16 14v.01M9 6.5V6a3 3 0 116 0v.5"/></svg>
+      </div>
         <h3>Parallel Events</h3>
         <p>Umroh & Hajj Fair, Halal Culinary Fair, dan Interactive Kids Corner.</p>
       </div>
@@ -151,7 +157,9 @@
     <!-- Item 4: Instant E-Ticket (Span 2) -->
     <div class="bento-item span-2">
       <div>
-        <div class="icon-glow">🎟️</div>
+        <div class="icon-glow">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+      </div>
         <h3>E-Tiket Instant dengan QR Code</h3>
         <p>Setelah melakukan konfirmasi, tiket digital lengkap dengan kode transaksi unik dan QR Code akan langsung diterbitkan untuk kemudahan check-in di lokasi.</p>
       </div>
@@ -198,10 +206,10 @@
         </div>
         <div class="session-card-body">
           <div class="session-time-badge">
-            ⏱️ {{ $event->time_slot ?? '10.00 WIB' }} · 📅 {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
+            {{ $event->time_slot ?? '10.00 WIB' }} · {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
           </div>
           <div class="session-card-title">{{ $event->title }}</div>
-          <div class="session-card-meta">🎙️ {{ $event->speaker ?? 'Pemateri Utama' }} · 📍 {{ $event->location }}</div>
+          <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
           <div class="session-card-action">PILIH & DAFTAR TIKET →</div>
         </div>
       </a>
@@ -219,14 +227,18 @@
   </div>
   <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap; max-width:600px; margin:0 auto;">
     <a href="mailto:info@eventflow.id" style="flex:1; min-width:200px; display:flex; align-items:center; gap:12px; background:var(--bento-card-bg); border:1px solid var(--bento-border); border-radius:16px; padding:20px 24px; text-decoration:none; transition:.3s;" onmouseover="this.style.borderColor='var(--bento-emerald)'" onmouseout="this.style.borderColor='var(--bento-border)'">
-      <div style="width:44px; height:44px; border-radius:12px; background:rgba(16,185,129,0.15); display:flex; align-items:center; justify-content:center; font-size:22px;">✉️</div>
+      <div style="width:44px; height:44px; border-radius:12px; background:rgba(16,185,129,0.15); display:flex; align-items:center; justify-content:center;">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:#10b981;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </div>
       <div>
         <div style="font-size:13px; color:var(--bento-muted);">Email</div>
         <div style="font-size:15px; font-weight:600; color:#fff;">info@eventflow.id</div>
       </div>
     </a>
     <a href="https://wa.me/6281234567890" target="_blank" style="flex:1; min-width:200px; display:flex; align-items:center; gap:12px; background:var(--bento-card-bg); border:1px solid var(--bento-border); border-radius:16px; padding:20px 24px; text-decoration:none; transition:.3s;" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='var(--bento-border)'">
-      <div style="width:44px; height:44px; border-radius:12px; background:rgba(37,211,102,0.15); display:flex; align-items:center; justify-content:center; font-size:22px;">💬</div>
+      <div style="width:44px; height:44px; border-radius:12px; background:rgba(37,211,102,0.15); display:flex; align-items:center; justify-content:center;">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:#25D366;"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+      </div>
       <div>
         <div style="font-size:13px; color:var(--bento-muted);">WhatsApp</div>
         <div style="font-size:15px; font-weight:600; color:#fff;">+62 812-3456-7890</div>
@@ -275,8 +287,8 @@
       <div class="detail-title" id="modalEventTitle"></div>
       
       <div class="detail-meta-list">
-        <div>📅 <strong>Tanggal & Waktu:</strong> <span id="modalEventDate"></span> (<span id="modalEventTime"></span>)</div>
-        <div>📍 <strong>Lokasi:</strong> <span id="modalEventLocation"></span></div>
+        <div><strong>Tanggal & Waktu:</strong> <span id="modalEventDate"></span> (<span id="modalEventTime"></span>)</div>
+        <div><strong>Lokasi:</strong> <span id="modalEventLocation"></span></div>
       </div>
 
       <div class="detail-desc" id="modalEventDesc"></div>
