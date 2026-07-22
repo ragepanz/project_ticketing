@@ -33,9 +33,14 @@
     <div class="review-row"><div class="k">Kuota Tersedia</div><div class="v">{{ $event->quota }} peserta</div></div>
     <div class="review-row"><div class="k">Biaya Registrasi</div><div class="v" style="color:var(--bento-emerald); font-size:16px; font-weight:800;">{{ $event->rupiah }}</div></div>
 
+    @php $full = $event->participants_count >= $event->quota; @endphp
     <div class="btn-row">
       <a href="{{ route('peserta.index') }}" class="btn btn-ghost">Kembali</a>
-      <a href="{{ route('peserta.form', $event) }}" class="btn btn-primary">Daftar Sekarang →</a>
+      @if($full)
+        <span class="btn btn-primary" style="opacity:0.5; cursor:not-allowed; background:#64748b; box-shadow:none;">Kuota Penuh</span>
+      @else
+        <a href="{{ route('peserta.form', $event) }}" class="btn btn-primary">Beli Tiket</a>
+      @endif
     </div>
   </div>
 </div>

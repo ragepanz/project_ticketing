@@ -200,7 +200,8 @@
 
   <div class="sessions-list">
     @forelse($events as $event)
-      <a href="{{ route('peserta.detail', $event) }}" class="session-card">
+      @php $full = $event->participants_count >= $event->quota; @endphp
+      <a href="{{ $full ? '#' : route('peserta.detail', $event) }}" class="session-card" style="{{ $full ? 'opacity:0.6; cursor:not-allowed;' : '' }}">
         <div class="session-card-image">
           <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
         </div>
@@ -210,7 +211,7 @@
           </div>
           <div class="session-card-title">{{ $event->title }}</div>
           <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
-          <div class="session-card-action">PILIH & DAFTAR TIKET →</div>
+          <div class="session-card-action" style="{{ $full ? 'background:rgba(239,68,68,0.2); border-color:rgba(239,68,68,0.3); color:#ef4444;' : '' }}">@if($full)Kuota Penuh @else Beli Tiket @endif</div>
         </div>
       </a>
     @empty

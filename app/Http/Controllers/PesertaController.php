@@ -10,12 +10,13 @@ class PesertaController extends Controller
 {
     public function index()
     {
-        $events = Event::all();
+        $events = Event::withCount('participants')->get();
         return view('peserta.index', compact('events'));
     }
 
     public function detail(Event $event)
     {
+        $event->loadCount('participants');
         return view('peserta.detail', compact('event'));
     }
 
