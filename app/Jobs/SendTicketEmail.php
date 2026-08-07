@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\TicketConfirmationMail;
 use App\Models\Participant;
+use App\Services\WhatsAppService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,11 +24,13 @@ class SendTicketEmail implements ShouldQueue
         public Participant $participant
     ) {}
 
-    public function handle(): void
+    public function handle(WhatsAppService $whatsAppService): void
     {
         $mail = new TicketConfirmationMail($this->participant, $this->participant->event);
 
         Mail::to($this->participant->email)
             ->send($mail);
+
+        $whatsAppService->sendTicketConfirmation($this->participant);
     }
 }
