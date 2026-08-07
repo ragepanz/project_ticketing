@@ -8,6 +8,8 @@ use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class AdminController extends Controller
@@ -75,17 +77,19 @@ class AdminController extends Controller
             'desc' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'quota' => 'required|integer|min:1',
-            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
-            'image_url' => 'nullable|string',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|mimetypes:image/jpeg,image/png,image/webp|max:4096',
+            'image_url' => 'nullable|url|max:2048',
         ]);
 
         if ($request->hasFile('image_file')) {
-            $validated['image'] = $request->file('image_file')->store('events', 'public');
+            $file = $request->file('image_file');
+            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $validated['image'] = $file->storeAs('events', $filename, 'public');
         } elseif ($request->filled('image_url')) {
             $validated['image'] = $request->input('image_url');
         }
 
-        $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']) . '-' . time();
+        $validated['slug'] = Str::slug($validated['title']) . '-' . time();
 
         Event::create($validated);
 
@@ -103,12 +107,17 @@ class AdminController extends Controller
             'desc' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'quota' => 'required|integer|min:1',
-            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
-            'image_url' => 'nullable|string',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|mimetypes:image/jpeg,image/png,image/webp|max:4096',
+            'image_url' => 'nullable|url|max:2048',
         ]);
 
         if ($request->hasFile('image_file')) {
-            $validated['image'] = $request->file('image_file')->store('events', 'public');
+            if ($event->image && !filter_var($event->image, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($event->image);
+            }
+            $file = $request->file('image_file');
+            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $validated['image'] = $file->storeAs('events', $filename, 'public');
         } elseif ($request->filled('image_url')) {
             $validated['image'] = $request->input('image_url');
         }
