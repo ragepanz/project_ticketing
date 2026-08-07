@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->appendToGroup('web', 'throttle:global');
         $middleware->alias([
             'admin.auth' => \App\Http\Middleware\AdminAuth::class,
             'client.auth' => \App\Http\Middleware\ClientAuth::class,
