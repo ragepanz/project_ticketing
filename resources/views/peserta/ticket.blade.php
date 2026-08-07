@@ -93,7 +93,7 @@
 
     <div class="btn-row no-print" style="display: flex; gap: 12px; flex-wrap: wrap;">
       <a href="{{ route('peserta.index') }}" class="btn btn-ghost" style="flex: 1; text-align: center;">Ke Beranda</a>
-      <button type="button" class="btn btn-ghost" onclick="downloadTicket()" style="flex: 1; text-align: center;">Download Tiket</button>
+      <a href="{{ route('peserta.ticket.download', $event) }}" class="btn btn-ghost" style="flex: 1; text-align: center;">Download Tiket PDF</a>
       <a href="https://wa.me/6281234567890" target="_blank" class="btn btn-primary" style="flex: 1.2; text-align: center;">Hubungi WhatsApp</a>
     </div>
   </div>

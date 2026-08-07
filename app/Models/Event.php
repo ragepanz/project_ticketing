@@ -20,6 +20,15 @@ class Event extends Model
         return $this->hasMany(Participant::class);
     }
 
+    protected function casts(): array
+    {
+        return [
+            'date' => 'date',
+            'price' => 'integer',
+            'quota' => 'integer',
+        ];
+    }
+
     public function getRupiahAttribute()
     {
         return 'Rp ' . number_format($this->price, 0, ',', '.');
