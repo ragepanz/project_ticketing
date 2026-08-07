@@ -35,6 +35,7 @@ class TicketingTest extends TestCase
             'desc' => 'Test description',
             'price' => 100000,
             'quota' => 50,
+            'status' => Event::STATUS_PUBLISHED,
         ]);
 
         $this->get('/peserta/' . $event->id)->assertStatus(200);
@@ -111,6 +112,7 @@ class TicketingTest extends TestCase
             'desc' => 'Deskripsi event baru',
             'price' => 200000,
             'quota' => 100,
+            'status' => 'published',
         ]);
 
         $storeResponse->assertRedirect(route('admin.events'));
@@ -124,6 +126,7 @@ class TicketingTest extends TestCase
             'desc' => 'Deskripsi diperbarui',
             'price' => 250000,
             'quota' => 150,
+            'status' => 'published',
         ]);
 
         $updateResponse->assertRedirect(route('admin.events'));
@@ -146,6 +149,7 @@ class TicketingTest extends TestCase
             'desc' => 'Scan test',
             'price' => 50000,
             'quota' => 20,
+            'status' => Event::STATUS_PUBLISHED,
         ]);
 
         $participant = Participant::create([

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Payment;
@@ -30,6 +31,7 @@ class AdminController extends Controller
             || Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'superadmin'])) {
             $request->session()->regenerate();
             $request->session()->put('admin_logged_in', true);
+            ActivityLog::log('login', 'Admin ' . (Auth::user()?->name ?? 'Admin') . ' berhasil login.');
             return redirect()->route('admin.dashboard');
         }
 
@@ -38,6 +40,7 @@ class AdminController extends Controller
 
     public function logout(Request $request)
     {
+        ActivityLog::log('logout', 'Admin ' . (Auth::user()?->name ?? 'Admin') . ' logout.');
         $request->session()->forget('admin_logged_in');
         Auth::logout();
         $request->session()->invalidate();
@@ -77,9 +80,14 @@ class AdminController extends Controller
             'desc' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'quota' => 'required|integer|min:1',
+            'status' => 'nullable|string|in:draft,published,closed,completed',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|mimetypes:image/jpeg,image/png,image/webp|max:4096',
             'image_url' => 'nullable|url|max:2048',
         ]);
+
+        if (empty($validated['status'])) {
+            $validated['status'] = Event::STATUS_PUBLISHED;
+        }
 
         if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');
@@ -91,7 +99,13 @@ class AdminController extends Controller
 
         $validated['slug'] = Str::slug($validated['title']) . '-' . time();
 
-        Event::create($validated);
+        $event = Event::create($validated);
+
+        ActivityLog::log(
+            'create_event',
+            'Admin ' . (Auth::user()?->name ?? 'Admin') . ' membuat event "' . $event->title . '".',
+            ['event_id' => $event->id, 'price' => $event->price, 'quota' => $event->quota, 'status' => $event->status]
+        );
 
         return redirect()->route('admin.events')->with('success', 'Event berhasil ditambahkan.');
     }
@@ -107,6 +121,7 @@ class AdminController extends Controller
             'desc' => 'nullable|string',
             'price' => 'required|integer|min:0',
             'quota' => 'required|integer|min:1',
+            'status' => 'nullable|string|in:draft,published,closed,completed',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|mimetypes:image/jpeg,image/png,image/webp|max:4096',
             'image_url' => 'nullable|url|max:2048',
         ]);
@@ -122,14 +137,33 @@ class AdminController extends Controller
             $validated['image'] = $request->input('image_url');
         }
 
+        if (empty($validated['status'])) {
+            unset($validated['status']);
+        }
+
         $event->update($validated);
+
+        ActivityLog::log(
+            'update_event',
+            'Admin ' . (Auth::user()?->name ?? 'Admin') . ' memperbarui event "' . $event->title . '".',
+            ['event_id' => $event->id, 'changed_fields' => array_keys($validated)]
+        );
 
         return redirect()->route('admin.events')->with('success', 'Event berhasil diperbarui.');
     }
 
     public function destroyEvent(Event $event)
     {
+        $title = $event->title;
+        $eventId = $event->id;
         $event->delete();
+
+        ActivityLog::log(
+            'delete_event',
+            'Admin ' . (Auth::user()?->name ?? 'Admin') . ' menghapus event "' . $title . '".',
+            ['event_id' => $eventId]
+        );
+
         return redirect()->route('admin.events')->with('success', 'Event berhasil dihapus.');
     }
 
@@ -178,6 +212,12 @@ class AdminController extends Controller
             'checked_in' => true,
             'checkin_time' => now(),
         ]);
+
+        ActivityLog::log(
+            'checkin_participant',
+            'Admin ' . (Auth::user()?->name ?? 'Admin') . ' melakukan check-in untuk peserta "' . ($participant->name ?? '-') . '" (' . $participant->trx_id . ').',
+            ['participant_id' => $participant->id, 'trx_id' => $participant->trx_id, 'event_id' => $participant->event_id]
+        );
 
         return response()->json([
             'error' => false,
@@ -257,12 +297,18 @@ class AdminController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'],
             'role' => 'admin',
         ]);
+
+        ActivityLog::log(
+            'create_admin',
+            'Superadmin ' . (Auth::user()?->name ?? 'Admin') . ' membuat akun admin "' . $user->name . '" (' . $user->email . ').',
+            ['user_id' => $user->id, 'email' => $user->email]
+        );
 
         return redirect()->route('admin.users')->with('success', 'Admin berhasil ditambahkan.');
     }
@@ -304,6 +350,12 @@ class AdminController extends Controller
 
         $user->update($data);
 
+        ActivityLog::log(
+            'update_admin',
+            'Superadmin ' . (Auth::user()?->name ?? 'Admin') . ' memperbarui admin "' . $user->name . '".',
+            ['user_id' => $user->id, 'changed_fields' => array_keys($data)]
+        );
+
         return redirect()->route('admin.users')->with('success', 'Admin berhasil diperbarui.');
     }
 
@@ -320,7 +372,16 @@ class AdminController extends Controller
             return back()->withErrors(['error' => 'Tidak dapat menghapus akun sendiri.']);
         }
 
+        $name = $user->name;
+        $email = $user->email;
+        $userId = $user->id;
         $user->delete();
+
+        ActivityLog::log(
+            'delete_admin',
+            'Superadmin ' . (Auth::user()?->name ?? 'Admin') . ' menghapus akun admin "' . $name . '" (' . $email . ').',
+            ['user_id' => $userId]
+        );
 
         return redirect()->route('admin.users')->with('success', 'Admin berhasil dihapus.');
     }
@@ -344,6 +405,11 @@ class AdminController extends Controller
         }
 
         $user->update(['password' => $validated['new_password']]);
+
+        ActivityLog::log(
+            'update_password',
+            'User ' . $user->name . ' mengganti password akun.'
+        );
 
         return redirect()->route('admin.dashboard')->with('success', 'Password berhasil diubah.');
     }

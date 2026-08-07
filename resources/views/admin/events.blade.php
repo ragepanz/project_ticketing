@@ -25,6 +25,7 @@
           <th>Lokasi</th>
           <th>Harga Tiket</th>
           <th>Kuota & Pendaftar</th>
+          <th>Status</th>
           <th style="text-align: right;">Aksi</th>
         </tr>
       </thead>
@@ -54,10 +55,24 @@
             <div style="font-weight: 700; color: #0f172a;">{{ $event->participants_count }} / {{ $event->quota }}</div>
             <div style="font-size: 11px; color: #64748b;">Peserta terdaftar</div>
           </td>
+          <td>
+            @php
+              $statusColors = [
+                'draft'     => 'background:#f1f5f9; color:#475569;',
+                'published' => 'background:#dcfce7; color:#166534;',
+                'closed'    => 'background:#fee2e2; color:#991b1b;',
+                'completed' => 'background:#e0e7ff; color:#3730a3;',
+              ];
+              $style = $statusColors[$event->status] ?? 'background:#f1f5f9; color:#475569;';
+            @endphp
+            <span style="padding: 4px 10px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; {{ $style }}">
+              {{ $event->status_label }}
+            </span>
+          </td>
           <td style="text-align: right;">
             <div style="display: flex; gap: 8px; justify-content: flex-end;">
               <button class="tixia-icon-btn" title="Edit Event" style="width: 34px; height: 34px;"
-                onclick="editEvent({{ $event->id }}, '{{ str_replace("'", "\'", $event->title) }}', '{{ str_replace("'", "\'", $event->speaker ?? '') }}', '{{ str_replace("'", "\'", $event->time_slot ?? '') }}', '{{ $event->date }}', '{{ str_replace("'", "\'", $event->location) }}', '{{ str_replace("'", "\'", $event->desc) }}', {{ $event->price }}, {{ $event->quota }}, '{{ str_replace("'", "\'", $event->image_url) }}')">
+                onclick="editEvent({{ $event->id }}, '{{ str_replace("'", "\'", $event->title) }}', '{{ str_replace("'", "\'", $event->speaker ?? '') }}', '{{ str_replace("'", "\'", $event->time_slot ?? '') }}', '{{ $event->date }}', '{{ str_replace("'", "\'", $event->location) }}', '{{ str_replace("'", "\'", $event->desc) }}', {{ $event->price }}, {{ $event->quota }}, '{{ str_replace("'", "\'", $event->image_url) }}', '{{ $event->status }}')">">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
               </button>
               <form method="POST" action="{{ route('admin.events.destroy', $event) }}" style="display:inline" onsubmit="return confirm('Hapus event ini?')">
@@ -134,10 +149,20 @@
             <input id="form-price" name="price" type="number" placeholder="150000" required style="width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; background: #fff; color: #0f172a;">
           </div>
 
-          <div class="field">
-            <label style="color: #334155; font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">Kuota Peserta</label>
-            <input id="form-quota" name="quota" type="number" placeholder="320" required style="width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; background: #fff; color: #0f172a;">
-          </div>
+           <div class="field">
+             <label style="color: #334155; font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">Kuota Peserta</label>
+             <input id="form-quota" name="quota" type="number" placeholder="320" required style="width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; background: #fff; color: #0f172a;">
+           </div>
+
+           <div class="field">
+             <label style="color: #334155; font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">Status Event</label>
+             <select id="form-status" name="status" style="width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; background: #fff; color: #0f172a;">
+               <option value="published">Dibuka (Published)</option>
+               <option value="draft">Draft</option>
+               <option value="closed">Ditutup (Closed)</option>
+               <option value="completed">Selesai (Completed)</option>
+             </select>
+           </div>
 
           <!-- Photo Upload & URL Section -->
           <div class="field field-full" style="grid-column: 1 / -1; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
@@ -202,6 +227,7 @@ function toggleModal() {
     document.getElementById('event-form').reset();
     document.getElementById('form-method').value = 'POST';
     document.getElementById('form-event-id').value = '';
+    document.getElementById('form-status').value = 'published';
     document.getElementById('modal-title').textContent = 'Tambah Event Baru';
     document.getElementById('modal-subtitle').textContent = 'Lengkapi informasi & poster foto event yang akan diselenggarakan';
     document.getElementById('modal-submit').textContent = 'Simpan Event';
@@ -211,7 +237,7 @@ function toggleModal() {
   }
 }
 
-function editEvent(id, title, speaker, time_slot, date, location, desc, price, quota, imageUrl) {
+function editEvent(id, title, speaker, time_slot, date, location, desc, price, quota, imageUrl, status) {
   document.getElementById('form-event-id').value = id;
   document.getElementById('form-title').value = title;
   document.getElementById('form-speaker').value = speaker || '';
@@ -221,6 +247,7 @@ function editEvent(id, title, speaker, time_slot, date, location, desc, price, q
   document.getElementById('form-desc').value = desc;
   document.getElementById('form-price').value = price;
   document.getElementById('form-quota').value = quota;
+  document.getElementById('form-status').value = status || 'published';
   document.getElementById('form-image-url').value = imageUrl || '';
   if (imageUrl) {
     document.getElementById('image-preview').src = imageUrl;
