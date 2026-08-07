@@ -244,13 +244,9 @@
       <div class="sub">Platform Ticketing Seminar & Kajian Akbar</div>
     </div>
 
-    <div class="footer-links">
-      <a href="#sessions">Jadwal Sesi</a>
-      <a href="#bento">Highlight</a>
-      <a href="#contact">Hubungi Kami</a>
-    </div>
+    <div class="footer-contact-title" style="font-size:14px; font-weight:700; color:#fff; margin-top:20px; letter-spacing:0.05em; text-transform:uppercase;">Hubungi Kami</div>
 
-    <div class="footer-contact" style="display:flex; gap:16px; margin-top:20px; justify-content:center; flex-wrap:wrap;">
+    <div class="footer-contact" style="display:flex; gap:16px; margin-top:12px; justify-content:center; flex-wrap:wrap;">
       <a href="mailto:info@eventflow.id" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#fff'">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
         info@eventflow.id
