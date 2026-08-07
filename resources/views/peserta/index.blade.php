@@ -244,17 +244,19 @@
       <div class="sub">Platform Ticketing Seminar & Kajian Akbar</div>
     </div>
 
-    <div class="footer-contact-title" style="font-size:14px; font-weight:700; color:#fff; margin-top:20px; letter-spacing:0.05em; text-transform:uppercase;">Hubungi Kami</div>
+    <div class="footer-contact-group" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+      <div class="footer-contact-title" style="font-size:14px; font-weight:700; color:#fff; letter-spacing:0.05em; text-transform:uppercase;">Hubungi Kami</div>
 
-    <div class="footer-contact" style="display:flex; gap:16px; margin-top:12px; justify-content:center; flex-wrap:wrap;">
-      <a href="mailto:info@eventflow.id" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#fff'">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        info@eventflow.id
-      </a>
-      <a href="https://wa.me/6281234567890" target="_blank" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#25D366'">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-        +62 812-3456-7890
-      </a>
+      <div class="footer-contact" style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+        <a href="mailto:info@eventflow.id" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--bento-muted)'">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          info@eventflow.id
+        </a>
+        <a href="https://wa.me/6281234567890" target="_blank" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--bento-muted)'">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          +62 812-3456-7890
+        </a>
+      </div>
     </div>
 
     <div style="font-size:13px; color:var(--bento-muted); margin-top:16px;">
