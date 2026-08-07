@@ -24,8 +24,9 @@ class ClientController extends Controller
 
         if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'client'])) {
             $request->session()->regenerate();
-            if ($request->filled('redirect')) {
-                return redirect($request->input('redirect'));
+            $redirect = $request->input('redirect');
+            if ($redirect && str_starts_with($redirect, '/') && !str_starts_with($redirect, '//')) {
+                return redirect($redirect);
             }
             return redirect()->route('client.dashboard');
         }

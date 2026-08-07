@@ -92,7 +92,7 @@ class AdminController extends Controller
 
         if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $filename = Str::uuid() . '.' . ($file->guessExtension() ?: 'png');
             $validated['image'] = $file->storeAs('events', $filename, 'public');
         } elseif ($request->filled('image_url')) {
             $validated['image'] = $request->input('image_url');
@@ -134,7 +134,7 @@ class AdminController extends Controller
                 Storage::disk('public')->delete($event->image);
             }
             $file = $request->file('image_file');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $filename = Str::uuid() . '.' . ($file->guessExtension() ?: 'png');
             $validated['image'] = $file->storeAs('events', $filename, 'public');
         } elseif ($request->filled('image_url')) {
             $validated['image'] = $request->input('image_url');
