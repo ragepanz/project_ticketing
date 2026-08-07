@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PesertaController extends Controller
 {
@@ -69,35 +70,55 @@ class PesertaController extends Controller
             return redirect()->route('peserta.form', $event);
         }
 
-        $registeredCount = Participant::where('event_id', $event->id)
-            ->where('status', 'lunas')
-            ->count();
-        if ($registeredCount >= $event->quota) {
+        try {
+            $participant = DB::transaction(function () use ($event, $data) {
+                $lockedEvent = Event::whereKey($event->id)->lockForUpdate()->first();
+
+                if (!$lockedEvent) {
+                    abort(404);
+                }
+
+                $registeredCount = Participant::where('event_id', $lockedEvent->id)
+                    ->where('status', 'lunas')
+                    ->count();
+
+                if ($registeredCount >= $lockedEvent->quota) {
+                    return null;
+                }
+
+                $trxId = 'TRX-' . strtoupper(substr(uniqid(), -5));
+
+                $participant = Participant::create([
+                    'trx_id' => $trxId,
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'],
+                    'instansi' => $data['instansi'] ?? null,
+                    'event_id' => $lockedEvent->id,
+                    'status' => 'lunas',
+                    'checked_in' => false,
+                ]);
+
+                $participant->payments()->create([
+                    'amount' => $lockedEvent->price,
+                    'status' => 'lunas',
+                    'payment_date' => now(),
+                ]);
+
+                return $participant;
+            });
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal membuat tiket: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan, silakan coba lagi.');
+        }
+
+        if (!$participant) {
             return redirect()->route('peserta.detail', $event)
                 ->with('error', 'Maaf, kuota event ini sudah penuh.');
         }
 
-        $trxId = 'TRX-' . strtoupper(substr(uniqid(), -5));
-
-        $participant = Participant::create([
-            'trx_id' => $trxId,
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'instansi' => $data['instansi'] ?? null,
-            'event_id' => $event->id,
-            'status' => 'lunas',
-            'checked_in' => false,
-        ]);
-
-        $participant->payments()->create([
-            'amount' => $event->price,
-            'status' => 'lunas',
-            'payment_date' => now(),
-        ]);
-
         $request->session()->forget(['peserta_form', 'peserta_event_id']);
-        $request->session()->put('ticket_trx_id', $trxId);
+        $request->session()->put('ticket_trx_id', $participant->trx_id);
         $request->session()->put('ticket_event_id', $event->id);
 
         return redirect()->route('peserta.ticket', $event);
