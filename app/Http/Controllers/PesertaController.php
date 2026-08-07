@@ -163,6 +163,23 @@ class PesertaController extends Controller
         return view('peserta.ticket', compact('event', 'participant'));
     }
 
+    public function downloadTicket(Request $request, Event $event)
+    {
+        $trxId = $request->session()->get('ticket_trx_id');
+        $participant = Participant::where('trx_id', $trxId)->first();
+
+        if (!$participant || $participant->event_id != $event->id) {
+            return redirect()->route('peserta.index');
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.ticket', [
+            'event' => $event,
+            'participant' => $participant,
+        ]);
+
+        return $pdf->download('E-Ticket-' . $participant->trx_id . '.pdf');
+    }
+
     public function searchOrder()
     {
         return view('peserta.search');

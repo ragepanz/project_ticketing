@@ -17,6 +17,7 @@ Route::prefix('peserta')->name('peserta.')->group(function () {
     Route::get('/{event:slug}/bayar', [PesertaController::class, 'payment'])->name('payment');
     Route::post('/{event:slug}/confirm', [PesertaController::class, 'confirm'])->name('confirm')->middleware('throttle:5,1');
     Route::get('/{event:slug}/tiket', [PesertaController::class, 'ticket'])->name('ticket');
+    Route::get('/{event:slug}/tiket/download', [PesertaController::class, 'downloadTicket'])->name('ticket.download');
 });
 
 Route::prefix('client')->name('client.')->group(function () {
