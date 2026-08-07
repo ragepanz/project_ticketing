@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Participant;
+use App\Jobs\SendTicketEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,18 +13,36 @@ class PesertaController extends Controller
 {
     public function index()
     {
-        $events = Event::withCount('participants')->get();
+        $events = Event::withCount(['participants' => function ($query) {
+            $query->where('status', 'lunas');
+        }])->where('status', Event::STATUS_PUBLISHED)
+          ->orderBy('date', 'asc')
+          ->get();
         return view('peserta.index', compact('events'));
     }
 
     public function detail(Event $event)
     {
-        $event->loadCount('participants');
+        if ($event->status !== Event::STATUS_PUBLISHED) {
+            abort(404, 'Event tidak ditemukan atau belum dibuka.');
+        }
+
+        $event->loadCount(['participants' => function ($query) {
+            $query->where('status', 'lunas');
+        }]);
         return view('peserta.detail', compact('event'));
     }
 
     public function form(Request $request, Event $event)
     {
+        if ($event->status !== Event::STATUS_PUBLISHED) {
+            abort(404, 'Event tidak ditemukan atau belum dibuka.');
+        }
+
+        if ($event->isSoldOut()) {
+            return redirect()->route('peserta.detail', $event)->with('error', 'Maaf, kuota event ini sudah penuh.');
+        }
+
         if (!Auth::check() || Auth::user()->role !== 'client') {
             return redirect()->route('client.login', ['redirect' => route('peserta.form', $event)]);
         }
@@ -74,8 +93,8 @@ class PesertaController extends Controller
             $participant = DB::transaction(function () use ($event, $data) {
                 $lockedEvent = Event::whereKey($event->id)->lockForUpdate()->first();
 
-                if (!$lockedEvent) {
-                    abort(404);
+                if (!$lockedEvent || $lockedEvent->status !== Event::STATUS_PUBLISHED) {
+                    return false;
                 }
 
                 $registeredCount = Participant::where('event_id', $lockedEvent->id)
@@ -120,6 +139,8 @@ class PesertaController extends Controller
         $request->session()->forget(['peserta_form', 'peserta_event_id']);
         $request->session()->put('ticket_trx_id', $participant->trx_id);
         $request->session()->put('ticket_event_id', $event->id);
+
+        SendTicketEmail::dispatch($participant);
 
         return redirect()->route('peserta.ticket', $event);
     }
