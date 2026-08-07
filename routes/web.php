@@ -9,14 +9,14 @@ Route::redirect('/', '/peserta');
 Route::prefix('peserta')->name('peserta.')->group(function () {
     Route::get('/', [PesertaController::class, 'index'])->name('index');
     Route::get('/cek-pesanan', [PesertaController::class, 'searchOrder'])->name('search-order');
-    Route::post('/cek-pesanan', [PesertaController::class, 'findOrder'])->name('find-order');
-    Route::get('/{event}', [PesertaController::class, 'detail'])->name('detail');
-    Route::get('/{event}/daftar', [PesertaController::class, 'form'])->name('form');
-    Route::post('/{event}/daftar', [PesertaController::class, 'storeForm'])->name('store-form')->middleware('throttle:10,1');
-    Route::get('/{event}/review', [PesertaController::class, 'review'])->name('review');
-    Route::get('/{event}/bayar', [PesertaController::class, 'payment'])->name('payment');
-    Route::post('/{event}/confirm', [PesertaController::class, 'confirm'])->name('confirm')->middleware('throttle:5,1');
-    Route::get('/{event}/tiket', [PesertaController::class, 'ticket'])->name('ticket');
+    Route::post('/cek-pesanan', [PesertaController::class, 'findOrder'])->name('find-order')->middleware('throttle:10,1');
+    Route::get('/{event:slug}', [PesertaController::class, 'detail'])->name('detail');
+    Route::get('/{event:slug}/daftar', [PesertaController::class, 'form'])->name('form');
+    Route::post('/{event:slug}/daftar', [PesertaController::class, 'storeForm'])->name('store-form')->middleware('throttle:10,1');
+    Route::get('/{event:slug}/review', [PesertaController::class, 'review'])->name('review');
+    Route::get('/{event:slug}/bayar', [PesertaController::class, 'payment'])->name('payment');
+    Route::post('/{event:slug}/confirm', [PesertaController::class, 'confirm'])->name('confirm')->middleware('throttle:5,1');
+    Route::get('/{event:slug}/tiket', [PesertaController::class, 'ticket'])->name('ticket');
 });
 
 Route::prefix('client')->name('client.')->group(function () {

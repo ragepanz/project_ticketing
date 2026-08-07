@@ -15,6 +15,10 @@ class SendTicketEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+    public $backoff = [60, 300, 900];
+    public $timeout = 120;
+
     public function __construct(
         public Participant $participant
     ) {}

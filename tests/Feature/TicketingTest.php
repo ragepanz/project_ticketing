@@ -38,7 +38,7 @@ class TicketingTest extends TestCase
             'status' => Event::STATUS_PUBLISHED,
         ]);
 
-        $this->get('/peserta/' . $event->id)->assertStatus(200);
+        $this->get('/peserta/' . $event->slug)->assertStatus(200);
 
         \App\Models\User::create([
             'name' => 'Test Client',
@@ -52,7 +52,7 @@ class TicketingTest extends TestCase
             'password' => 'password',
         ])->assertRedirect(route('client.dashboard'));
 
-        $this->get('/peserta/' . $event->id . '/daftar')->assertStatus(200);
+        $this->get('/peserta/' . $event->slug . '/daftar')->assertStatus(200);
 
         $postData = [
             'name' => 'Ahmad Fathir',
@@ -61,19 +61,19 @@ class TicketingTest extends TestCase
             'instansi' => 'Komunitas Tech',
         ];
 
-        $response = $this->post('/peserta/' . $event->id . '/daftar', $postData);
-        $response->assertRedirect(route('peserta.review', $event));
+        $response = $this->post('/peserta/' . $event->slug . '/daftar', $postData);
+        $response->assertRedirect(route('peserta.review', $event->slug));
 
-        $this->get('/peserta/' . $event->id . '/review')->assertStatus(200);
-        $this->get('/peserta/' . $event->id . '/bayar')->assertStatus(200);
+        $this->get('/peserta/' . $event->slug . '/review')->assertStatus(200);
+        $this->get('/peserta/' . $event->slug . '/bayar')->assertStatus(200);
 
-        $this->post('/peserta/' . $event->id . '/confirm')->assertRedirect(route('peserta.ticket', $event));
+        $this->post('/peserta/' . $event->slug . '/confirm')->assertRedirect(route('peserta.ticket', $event->slug));
 
         $participant = Participant::where('email', 'ahmad@example.com')->first();
         $this->assertNotNull($participant);
         $this->assertEquals('lunas', $participant->status);
 
-        $this->get('/peserta/' . $event->id . '/tiket')->assertStatus(200);
+        $this->get('/peserta/' . $event->slug . '/tiket')->assertStatus(200);
     }
 
     public function test_admin_authentication_and_dashboard(): void

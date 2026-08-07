@@ -207,18 +207,23 @@ class AdminController extends Controller
             return response()->json(['error' => true, 'message' => 'Tiket tidak ditemukan.']);
         }
 
-        if ($participant->checked_in) {
+        $now = now();
+        $updated = Participant::where('id', $participant->id)
+            ->where('checked_in', false)
+            ->update([
+                'checked_in' => true,
+                'checkin_time' => $now,
+            ]);
+
+        if ($updated === 0) {
             return response()->json([
                 'error' => false,
                 'already_checked' => true,
-                'participant' => $participant,
+                'participant' => $participant->fresh(),
             ]);
         }
 
-        $participant->update([
-            'checked_in' => true,
-            'checkin_time' => now(),
-        ]);
+        $participant = $participant->fresh();
 
         ActivityLog::log(
             'checkin_participant',
@@ -229,7 +234,7 @@ class AdminController extends Controller
         return response()->json([
             'error' => false,
             'already_checked' => false,
-            'participant' => $participant->fresh(),
+            'participant' => $participant,
         ]);
     }
 

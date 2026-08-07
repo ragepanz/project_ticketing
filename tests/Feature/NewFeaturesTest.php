@@ -46,8 +46,8 @@ class NewFeaturesTest extends TestCase
         $response->assertSee('Published Event');
         $response->assertDontSee('Draft Event');
 
-        $this->get('/peserta/' . $publishedEvent->id)->assertStatus(200);
-        $this->get('/peserta/' . $draftEvent->id)->assertStatus(404);
+        $this->get('/peserta/' . $publishedEvent->slug)->assertStatus(200);
+        $this->get('/peserta/' . $draftEvent->slug)->assertStatus(404);
     }
 
     public function test_ticket_email_is_dispatched_and_sent(): void
@@ -88,7 +88,7 @@ class NewFeaturesTest extends TestCase
             'peserta_event_id' => $event->id,
         ]);
 
-        $response = $this->post("/peserta/{$event->id}/confirm");
+        $response = $this->post("/peserta/{$event->slug}/confirm");
         $response->assertRedirect();
 
         Queue::assertPushed(SendTicketEmail::class);

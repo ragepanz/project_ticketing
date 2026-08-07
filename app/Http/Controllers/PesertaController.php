@@ -144,6 +144,8 @@ class PesertaController extends Controller
         $request->session()->put('ticket_trx_id', $participant->trx_id);
         $request->session()->put('ticket_event_id', $event->id);
 
+        Cache::forget('events.published');
+
         SendTicketEmail::dispatch($participant);
 
         return redirect()->route('peserta.ticket', $event);
@@ -174,10 +176,11 @@ class PesertaController extends Controller
 
         $q = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], trim($request->input('query')));
 
-        $participant = Participant::where('trx_id', 'LIKE', "%{$q}%")
-            ->orWhere('email', 'LIKE', "%{$q}%")
-            ->orWhere('phone', 'LIKE', "%{$q}%")
-            ->first();
+        $participant = Participant::where(function ($query) use ($q) {
+            $query->where('trx_id', 'LIKE', "%{$q}%")
+                ->orWhere('email', 'LIKE', "%{$q}%")
+                ->orWhere('phone', 'LIKE', "%{$q}%");
+        })->first();
 
         if (!$participant) {
             return back()->with('error', 'Pesanan tidak ditemukan dengan Kode TRX / Email / WhatsApp tersebut.');

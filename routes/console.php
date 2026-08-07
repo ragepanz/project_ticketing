@@ -14,6 +14,7 @@ Schedule::call(function () {
         ->update(['status' => \App\Models\Event::STATUS_CLOSED]);
     
     if ($count > 0) {
+        \Illuminate\Support\Facades\Cache::forget('events.published');
         \Illuminate\Support\Facades\Log::info("Auto-closed {$count} expired events");
     }
 })->dailyAt('00:05')->name('events.close-expired');
@@ -48,6 +49,7 @@ Schedule::call(function () {
         ->update(['status' => \App\Models\Event::STATUS_COMPLETED]);
     
     if ($count > 0) {
+        \Illuminate\Support\Facades\Cache::forget('events.published');
         \Illuminate\Support\Facades\Log::info("Auto-completed {$count} finished events");
     }
 })->dailyAt('00:10')->name('events.auto-complete');
@@ -60,6 +62,10 @@ Schedule::call(function () {
     $deletedParticipants = \App\Models\Participant::onlyTrashed()
         ->where('deleted_at', '<=', now()->subDays(30))
         ->forceDelete();
+
+    if ($deleted > 0) {
+        \Illuminate\Support\Facades\Cache::forget('events.published');
+    }
     
     \Illuminate\Support\Facades\Log::info("Purged {$deleted} events and {$deletedParticipants} participants older than 30 days");
 })->weeklyOn(0, '02:00')->name('purge-soft-deletes');
