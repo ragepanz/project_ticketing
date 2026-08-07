@@ -8,16 +8,20 @@ use App\Jobs\SendTicketEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class PesertaController extends Controller
 {
     public function index()
     {
-        $events = Event::withCount(['participants' => function ($query) {
-            $query->where('status', 'lunas');
-        }])->where('status', Event::STATUS_PUBLISHED)
-          ->orderBy('date', 'asc')
-          ->get();
+        $events = Cache::remember('events.published', 600, function () {
+            return Event::withCount(['participants' => function ($query) {
+                $query->where('status', 'lunas');
+            }])->where('status', Event::STATUS_PUBLISHED)
+              ->orderBy('date', 'asc')
+              ->get();
+        });
+        
         return view('peserta.index', compact('events'));
     }
 

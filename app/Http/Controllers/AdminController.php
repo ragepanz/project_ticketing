@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -107,6 +108,8 @@ class AdminController extends Controller
             ['event_id' => $event->id, 'price' => $event->price, 'quota' => $event->quota, 'status' => $event->status]
         );
 
+        Cache::forget('events.published');
+
         return redirect()->route('admin.events')->with('success', 'Event berhasil ditambahkan.');
     }
 
@@ -149,6 +152,8 @@ class AdminController extends Controller
             ['event_id' => $event->id, 'changed_fields' => array_keys($validated)]
         );
 
+        Cache::forget('events.published');
+
         return redirect()->route('admin.events')->with('success', 'Event berhasil diperbarui.');
     }
 
@@ -163,6 +168,8 @@ class AdminController extends Controller
             'Admin ' . (Auth::user()?->name ?? 'Admin') . ' menghapus event "' . $title . '".',
             ['event_id' => $eventId]
         );
+
+        Cache::forget('events.published');
 
         return redirect()->route('admin.events')->with('success', 'Event berhasil dihapus.');
     }
