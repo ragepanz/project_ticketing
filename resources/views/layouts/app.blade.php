@@ -26,6 +26,8 @@
         </a>
         <nav class="nav-menu">
           <a href="{{ route('peserta.index') }}" class="nav-item {{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
+          <a href="{{ route('peserta.index') }}#sessions" class="nav-item">Jadwal Sesi</a>
+          <a href="{{ route('peserta.index') }}#bento" class="nav-item">Highlight</a>
           <a href="{{ route('peserta.search-order') }}" class="nav-item {{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket Saya</a>
         </nav>
       </div>
@@ -62,6 +64,8 @@
         </a>
         <nav class="nav-menu">
           <a href="{{ route('peserta.index') }}" class="nav-item {{ request()->routeIs('peserta.index') ? 'active' : '' }}">Beranda</a>
+          <a href="{{ route('peserta.index') }}#sessions" class="nav-item">Jadwal Sesi</a>
+          <a href="{{ route('peserta.index') }}#bento" class="nav-item">Highlight</a>
           <a href="{{ route('peserta.search-order') }}" class="nav-item {{ request()->routeIs('peserta.search-order') ? 'active' : '' }}">Cek Tiket</a>
         </nav>
       </div>

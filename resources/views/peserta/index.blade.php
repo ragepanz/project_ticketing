@@ -236,34 +236,6 @@
   </div>
 </section>
 
-<!-- 4. CONTACT US SECTION -->
-<section class="bento-section" id="contact" style="padding-bottom:0;">
-  <div class="section-title-wrap">
-    <h2>Hubungi Kami</h2>
-    <p>Butuh bantuan? Silakan hubungi kami melalui kontak di bawah</p>
-  </div>
-  <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap; max-width:600px; margin:0 auto;">
-    <a href="mailto:info@eventflow.id" style="flex:1; min-width:200px; display:flex; align-items:center; gap:12px; background:var(--bento-card-bg); border:1px solid var(--bento-border); border-radius:16px; padding:20px 24px; text-decoration:none; transition:.3s;" onmouseover="this.style.borderColor='var(--bento-emerald)'" onmouseout="this.style.borderColor='var(--bento-border)'">
-      <div style="width:44px; height:44px; border-radius:12px; background:rgba(16,185,129,0.15); display:flex; align-items:center; justify-content:center;">
-        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:#10b981;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-      </div>
-      <div>
-        <div style="font-size:13px; color:var(--bento-muted);">Email</div>
-        <div style="font-size:15px; font-weight:600; color:#fff;">info@eventflow.id</div>
-      </div>
-    </a>
-    <a href="https://wa.me/6281234567890" target="_blank" style="flex:1; min-width:200px; display:flex; align-items:center; gap:12px; background:var(--bento-card-bg); border:1px solid var(--bento-border); border-radius:16px; padding:20px 24px; text-decoration:none; transition:.3s;" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='var(--bento-border)'">
-      <div style="width:44px; height:44px; border-radius:12px; background:rgba(37,211,102,0.15); display:flex; align-items:center; justify-content:center;">
-        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:#25D366;"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-      </div>
-      <div>
-        <div style="font-size:13px; color:var(--bento-muted);">WhatsApp</div>
-        <div style="font-size:15px; font-weight:600; color:#fff;">+62 812-3456-7890</div>
-      </div>
-    </a>
-  </div>
-</section>
-
 <!-- 5. MODERN TECH FOOTER -->
 <footer class="bento-footer">
   <div class="footer-inner">
@@ -275,10 +247,21 @@
     <div class="footer-links">
       <a href="#sessions">Jadwal Sesi</a>
       <a href="#bento">Highlight</a>
-      <a href="{{ route('admin.login') }}">Panel Admin</a>
+      <a href="#contact">Hubungi Kami</a>
     </div>
 
-    <div style="font-size:13px; color:var(--bento-muted);">
+    <div class="footer-contact" style="display:flex; gap:16px; margin-top:20px; justify-content:center; flex-wrap:wrap;">
+      <a href="mailto:info@eventflow.id" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#fff'">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        info@eventflow.id
+      </a>
+      <a href="https://wa.me/6281234567890" target="_blank" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#25D366'">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        +62 812-3456-7890
+      </a>
+    </div>
+
+    <div style="font-size:13px; color:var(--bento-muted); margin-top:16px;">
       © 2026 EventFlow. All rights reserved.
     </div>
   </div>
