@@ -19,10 +19,10 @@
   <!-- Grid layout responsif (1 kolom di HP, 2 kolom di tablet/desktop) -->
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; align-items: start;">
     <div>
-      <!-- Camera Scanner Container -->
+<!-- Camera Scanner Container -->
       <div style="width: 100%; max-width: 320px; margin: 0 auto; border: 1px solid #cbd5e1; border-radius: 20px; overflow: hidden; background: #f8fafc; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative;">
         <!-- Area preview kamera -->
-        <div id="reader" style="width: 100%; aspect-ratio: 1; background: #000; position: relative;">
+        <div id="reader" style="width: 100%; aspect-ratio: 1; background: #000; position: relative; overflow: hidden;">
           <!-- Placeholder ketika kamera belum aktif -->
           <div id="scanner-placeholder" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 13px; font-weight: 600; text-align: center; padding: 20px; z-index: 5; background: #0f172a;">
             <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px; opacity:0.7;">
@@ -31,6 +31,8 @@
             </svg>
             Kamera belum aktif
           </div>
+        </div>
+      </div>
         </div>
       </div>
 
@@ -69,11 +71,18 @@
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
 /* Styling reader container */
+#reader {
+  position: relative !important;
+  overflow: hidden !important;
+}
 #reader video {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   border-radius: 18px !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
 }
 </style>
 <script>
@@ -131,7 +140,11 @@ function startCamera() {
   startBtn.textContent = 'Membuka Kamera...';
 
   // Coba jalankan kamera belakang secara langsung menggunakan facingMode "environment"
-  const config = { fps: 15, qrbox: { width: 220, height: 220 } };
+  const config = { 
+    fps: 15, 
+    qrbox: { width: 200, height: 200 },
+    aspectRatio: 1.0
+  };
 
   const startWithFacingMode = () => {
     return html5QrCode.start(
