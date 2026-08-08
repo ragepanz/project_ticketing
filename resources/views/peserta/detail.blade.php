@@ -33,10 +33,21 @@
     <div class="review-row"><div class="k">Kuota Tersedia</div><div class="v">{{ $event->quota }} peserta</div></div>
     <div class="review-row"><div class="k">Biaya Registrasi</div><div class="v" style="color:var(--bento-emerald); font-size:16px; font-weight:800;">{{ $event->rupiah }}</div></div>
 
-    @php $full = $event->participants_count >= $event->quota; @endphp
+    @php 
+      $full = $event->participants_count >= $event->quota; 
+      $isPublished = $event->status === \App\Models\Event::STATUS_PUBLISHED;
+    @endphp
     <div class="btn-row">
       <a href="{{ route('peserta.index') }}" class="btn btn-ghost">Kembali</a>
-      @if($full)
+      @if(!$isPublished)
+        <span class="btn btn-primary" style="opacity:0.5; cursor:not-allowed; background:#64748b; box-shadow:none;">
+          @if($event->status === \App\Models\Event::STATUS_DRAFT) Belum Dibuka
+          @elseif($event->status === \App\Models\Event::STATUS_CLOSED) Registrasi Ditutup
+          @elseif($event->status === \App\Models\Event::STATUS_COMPLETED) Event Selesai
+          @else Tidak Tersedia
+          @endif
+        </span>
+      @elseif($full)
         <span class="btn btn-primary" style="opacity:0.5; cursor:not-allowed; background:#64748b; box-shadow:none;">Kuota Penuh</span>
       @else
         <a href="{{ Auth::check() && Auth::user()->role === 'client' ? route('peserta.form', $event) : route('client.login', ['redirect' => route('peserta.form', $event)]) }}" class="btn btn-primary">Beli Tiket</a>

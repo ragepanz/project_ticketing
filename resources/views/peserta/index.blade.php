@@ -200,8 +200,31 @@
 
   <div class="sessions-list">
     @forelse($events as $event)
-      @php $full = $event->participants_count >= $event->quota; @endphp
-      @if($full)
+      @php 
+        $full = $event->participants_count >= $event->quota; 
+        $isPublished = $event->status === \App\Models\Event::STATUS_PUBLISHED;
+      @endphp
+      @if(!$isPublished)
+      <div class="session-card" style="opacity:0.5; cursor:default;">
+        <div class="session-card-image">
+          <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
+        </div>
+        <div class="session-card-body">
+          <div class="session-time-badge">
+            {{ $event->time_slot ?? '10.00 WIB' }} · {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
+          </div>
+          <div class="session-card-title">{{ $event->title }}</div>
+          <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
+          <div class="session-card-action" style="background:rgba(100,116,139,0.2); border-color:rgba(100,116,139,0.3); color:#94a3b8;">
+            @if($event->status === \App\Models\Event::STATUS_DRAFT) Belum Dibuka
+            @elseif($event->status === \App\Models\Event::STATUS_CLOSED) Registrasi Ditutup
+            @elseif($event->status === \App\Models\Event::STATUS_COMPLETED) Event Selesai
+            @else Tidak Tersedia
+            @endif
+          </div>
+        </div>
+      </div>
+      @elseif($full)
       <div class="session-card" style="opacity:0.5; cursor:default;">
         <div class="session-card-image">
           <img src="{{ $event->image_url }}" alt="{{ $event->title }}">

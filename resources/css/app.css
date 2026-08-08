@@ -809,10 +809,24 @@ a {
 /* Event Sessions Grid Cards */
 .sessions-list {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   gap: 20px;
   margin-top: 24px;
+  padding-bottom: 16px;
+  width: 100%;
+  scrollbar-width: thin;
+}
+.sessions-list::-webkit-scrollbar {
+  height: 6px;
+}
+.sessions-list::-webkit-scrollbar-thumb {
+  background: var(--bento-emerald);
+  border-radius: 3px;
+}
+.sessions-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
 }
 .session-card {
   width: 320px;
