@@ -53,11 +53,14 @@ class WhatsAppService
         }
 
         try {
-            $response = Http::timeout(10)->post($endpoint, [
-                'token' => $apiKey,
-                'target' => $phone,
-                'message' => $message,
-            ]);
+            $response = Http::timeout(10)
+                ->withHeaders([
+                    'Authorization' => $apiKey
+                ])
+                ->post($endpoint, [
+                    'target' => $phone,
+                    'message' => $message,
+                ]);
 
             if ($response->successful()) {
                 Log::info("WhatsApp message successfully sent to {$phone}");

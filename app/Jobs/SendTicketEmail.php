@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendTicketEmail implements ShouldQueue
@@ -26,11 +27,17 @@ class SendTicketEmail implements ShouldQueue
 
     public function handle(WhatsAppService $whatsAppService): void
     {
-        $mail = new TicketConfirmationMail($this->participant, $this->participant->event);
+         try {
+            $mail = new TicketConfirmationMail($this->participant, $this->participant->event);
+            Mail::to($this->participant->email)->send($mail);
+        } catch (\Throwable $e) {
+            Log::warning('Gagal mengirim email tiket ke ' . $this->participant->email . ': ' . $e->getMessage());
+        }
 
-        Mail::to($this->participant->email)
-            ->send($mail);
-
-        $whatsAppService->sendTicketConfirmation($this->participant);
+        try {
+            $whatsAppService->sendTicketConfirmation($this->participant);
+        } catch (\Throwable $e) {
+            Log::warning('Gagal mengirim WhatsApp tiket ke ' . $this->participant->phone . ': ' . $e->getMessage());
+        }
     }
 }

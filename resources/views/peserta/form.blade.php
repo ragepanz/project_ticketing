@@ -21,17 +21,18 @@
       @csrf
       <div class="field">
         <label for="name">Nama Lengkap</label>
-        <input id="name" name="name" value="{{ old('name') }}" placeholder="Nama sesuai KTP" required>
+        <input id="name" name="name" value="{{ old('name', Auth::user()?->name) }}" placeholder="Nama sesuai KTP" required>
         @error('name')<div style="color:var(--coral); font-size:12px; margin-top:4px;">{{ $message }}</div>@enderror
       </div>
       <div class="field">
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="nama@email.com" required>
+        <input id="email" name="email" type="email" value="{{ old('email', Auth::user()?->email) }}" placeholder="nama@email.com" required>
         @error('email')<div style="color:var(--coral); font-size:12px; margin-top:4px;">{{ $message }}</div>@enderror
       </div>
       <div class="field">
-        <label for="phone">No. WhatsApp</label>
-        <input id="phone" name="phone" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx" required>
+        <label for="phone">No. WhatsApp (Aktif)</label>
+        <input id="phone" name="phone" value="{{ old('phone', Auth::user()?->phone) }}" placeholder="Contoh: 081234567890" required>
+        <div style="color:var(--bento-muted); font-size:12px; margin-top:4px;">E-tiket dan notifikasi akan dikirim langsung ke nomor WhatsApp ini.</div>
         @error('phone')<div style="color:var(--coral); font-size:12px; margin-top:4px;">{{ $message }}</div>@enderror
       </div>
       <div class="field">
