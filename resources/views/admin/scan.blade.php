@@ -117,89 +117,140 @@ function startCamera() {
   const selectContainer = document.getElementById('camera-select-container');
   const selectElement = document.getElementById('camera-select');
 
-  if (!html5QrCode) {
+  if (typeof Html5Qrcode === 'undefined') {
     showToast('Scanner library gagal dimuat. Coba refresh halaman.');
     return;
   }
 
-  // Request izin kamera & dapatkan list kamera
-  Html5Qrcode.getCameras().then(devices => {
-    if (devices && devices.length > 0) {
-      // Tampilkan pilihan kamera jika ada lebih dari 1
-      if (devices.length > 1) {
-        selectContainer.style.display = 'block';
-        selectElement.innerHTML = '';
-        devices.forEach((device, index) => {
-          const opt = document.createElement('option');
-          opt.value = device.id;
-          opt.text = device.label || `Kamera ${index + 1}`;
-          selectElement.appendChild(opt);
-        });
+  if (!html5QrCode) {
+    html5QrCode = new Html5Qrcode("reader");
+  }
 
-        // Set default ke kamera belakang (environment) jika ada
-        const backCam = devices.find(device => device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('belakang') || device.label.toLowerCase().includes('environment'));
-        if (backCam) {
-          selectedCameraId = backCam.id;
-          selectElement.value = backCam.id;
-        } else {
-          selectedCameraId = devices[0].id;
-        }
+  // Tampilkan loading / indikator
+  startBtn.disabled = true;
+  startBtn.textContent = 'Membuka Kamera...';
 
-        // Tangani pergantian kamera
-        selectElement.onchange = function() {
-          stopCamera().then(() => {
-            selectedCameraId = selectElement.value;
-            launchScanner(selectedCameraId);
+  // Coba jalankan kamera belakang secara langsung menggunakan facingMode "environment"
+  const config = { fps: 15, qrbox: { width: 220, height: 220 } };
+
+  const startWithFacingMode = () => {
+    return html5QrCode.start(
+      { facingMode: "environment" },
+      config,
+      onScanSuccess,
+      () => {}
+    );
+  };
+
+  const startWithCameraId = (cameraId) => {
+    return html5QrCode.start(
+      cameraId,
+      config,
+      onScanSuccess,
+      () => {}
+    );
+  };
+
+  startWithFacingMode()
+    .then(() => {
+      onCameraStarted();
+      populateCameraList();
+    })
+    .catch(err => {
+      console.warn("Gagal pakai facingMode, mencoba via getCameras()...", err);
+      // Fallback ke getCameras() jika facingMode tidak didukung
+      Html5Qrcode.getCameras().then(devices => {
+        if (devices && devices.length > 0) {
+          const backCam = devices.find(d => 
+            (d.label || '').toLowerCase().includes('back') || 
+            (d.label || '').toLowerCase().includes('belakang') || 
+            (d.label || '').toLowerCase().includes('environment')
+          );
+          const camId = backCam ? backCam.id : devices[0].id;
+          return startWithCameraId(camId).then(() => {
+            onCameraStarted();
+            populateCameraList(devices);
           });
-        };
-      } else {
-        selectedCameraId = devices[0].id;
-      }
-
-      placeholder.style.display = 'none';
-      startBtn.style.display = 'none';
-      stopBtn.style.display = 'block';
-
-      launchScanner(selectedCameraId);
-    } else {
-      showToast('Kamera tidak ditemukan pada perangkat ini.');
-    }
-  }).catch(err => {
-    console.error(err);
-    showToast('Izin akses kamera ditolak browser.');
-  });
+        } else {
+          throw new Error('Tidak ada perangkat kamera yang ditemukan.');
+        }
+      }).catch(finalErr => {
+        console.error("Camera Start Error:", finalErr);
+        resetCameraUI();
+        let msg = finalErr.message || finalErr;
+        if (msg.toString().includes('NotAllowedError') || msg.toString().includes('Permission')) {
+          alert('Izin kamera ditolak oleh browser. Mohon izinkan akses kamera di situs ini (klik ikon gembok/setelan situs di Chrome) lalu muat ulang halaman.');
+        } else {
+          alert('Gagal mengakses kamera: ' + msg);
+        }
+      });
+    });
 }
 
-function launchScanner(cameraId) {
-  html5QrCode.start(
-    cameraId, 
-    {
-      fps: 15,
-      qrbox: { width: 220, height: 220 }
-    },
-    onScanSuccess,
-    (errorMessage) => {
-      // verbose error dimatikan agar log bersih
-    }
-  ).catch(err => {
-    showToast('Gagal memulai kamera: ' + err);
-  });
+function onCameraStarted() {
+  const placeholder = document.getElementById('scanner-placeholder');
+  const startBtn = document.getElementById('start-scan-btn');
+  const stopBtn = document.getElementById('stop-scan-btn');
+
+  placeholder.style.display = 'none';
+  startBtn.style.display = 'none';
+  startBtn.disabled = false;
+  startBtn.textContent = 'Aktifkan Kamera';
+  stopBtn.style.display = 'block';
 }
 
-function stopCamera() {
+function resetCameraUI() {
   const placeholder = document.getElementById('scanner-placeholder');
   const startBtn = document.getElementById('start-scan-btn');
   const stopBtn = document.getElementById('stop-scan-btn');
   const selectContainer = document.getElementById('camera-select-container');
 
+  placeholder.style.display = 'flex';
+  startBtn.style.display = 'block';
+  startBtn.disabled = false;
+  startBtn.textContent = 'Aktifkan Kamera';
+  stopBtn.style.display = 'none';
+  selectContainer.style.display = 'none';
+}
+
+function populateCameraList(devicesList) {
+  const selectContainer = document.getElementById('camera-select-container');
+  const selectElement = document.getElementById('camera-select');
+
+  const getDevices = devicesList ? Promise.resolve(devicesList) : Html5Qrcode.getCameras();
+
+  getDevices.then(devices => {
+    if (devices && devices.length > 1) {
+      selectContainer.style.display = 'block';
+      selectElement.innerHTML = '';
+      devices.forEach((device, index) => {
+        const opt = document.createElement('option');
+        opt.value = device.id;
+        opt.text = device.label || `Kamera ${index + 1}`;
+        selectElement.appendChild(opt);
+      });
+
+      selectElement.onchange = function() {
+        stopCamera().then(() => {
+          html5QrCode.start(
+            selectElement.value,
+            { fps: 15, qrbox: { width: 220, height: 220 } },
+            onScanSuccess,
+            () => {}
+          ).then(onCameraStarted);
+        });
+      };
+    }
+  }).catch(() => {});
+}
+
+function stopCamera() {
   if (html5QrCode && html5QrCode.isScanning) {
     return html5QrCode.stop().then(() => {
-      placeholder.style.display = 'flex';
-      startBtn.style.display = 'block';
-      stopBtn.style.display = 'none';
-      selectContainer.style.display = 'none';
+      resetCameraUI();
     }).catch(err => {
       console.error('Gagal mematikan kamera: ', err);
+      resetCameraUI();
     });
   }
   return Promise.resolve();
