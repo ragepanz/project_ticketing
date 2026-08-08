@@ -16,14 +16,42 @@
 </div>
 
 <div class="tixia-card" style="padding: 32px;">
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
+  <!-- Grid layout responsif (1 kolom di HP, 2 kolom di tablet/desktop) -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; align-items: start;">
     <div>
       <!-- Camera Scanner Container -->
-      <div style="width: 100%; max-width: 320px; margin: 0 auto; border: 1px solid #cbd5e1; border-radius: 20px; overflow: hidden; background: #f8fafc; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-        <div id="reader" style="width: 100%;"></div>
+      <div style="width: 100%; max-width: 320px; margin: 0 auto; border: 1px solid #cbd5e1; border-radius: 20px; overflow: hidden; background: #f8fafc; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative;">
+        <!-- Area preview kamera -->
+        <div id="reader" style="width: 100%; aspect-ratio: 1; background: #000; position: relative;">
+          <!-- Placeholder ketika kamera belum aktif -->
+          <div id="scanner-placeholder" style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8; font-size: 13px; font-weight: 600; text-align: center; padding: 20px; z-index: 5; background: #0f172a;">
+            <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px; opacity:0.7;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"/>
+            </svg>
+            Kamera belum aktif
+          </div>
+        </div>
       </div>
 
-      <div style="display: flex; gap: 10px; margin-top: 20px; max-width: 380px; margin-left: auto; margin-right: auto;">
+      <!-- Kamera controls & selectors -->
+      <div style="margin: 20px auto; max-width: 320px; display: flex; flex-direction: column; gap: 10px;">
+        <div id="camera-select-container" style="display: none;">
+          <label style="font-size: 12px; font-weight:700; color:#64748b; display:block; margin-bottom:4px;">PILIH KAMERA:</label>
+          <select id="camera-select" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; background:#fff; outline:none;"></select>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button id="start-scan-btn" onclick="startCamera()" class="tixia-report-btn" style="flex: 1; background: #16a34a; color: #fff; border-radius: 12px; padding: 12px; font-size: 13.5px; font-weight:700;">
+            Aktifkan Kamera
+          </button>
+          <button id="stop-scan-btn" onclick="stopCamera()" class="tixia-report-btn" style="flex: 1; background: #ef4444; color: #fff; border-radius: 12px; padding: 12px; font-size: 13.5px; font-weight:700; display: none;">
+            Matikan Kamera
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 20px; max-width: 380px; margin-left: auto; margin-right: auto; padding-top: 10px; border-top: 1px dashed #cbd5e1;">
         <input id="scan-code-input" placeholder="Ketik kode tiket, mis. TRX-8841" value="{{ request('code') }}" style="flex: 1; padding: 12px 18px; border: 1px solid #cbd5e1; border-radius: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; outline: none; background: #ffffff; color: #0f172a;">
         <button onclick="processScan()" class="tixia-report-btn" style="background: #383be5; color: #fff; border-radius: 12px; padding: 12px 24px;">Scan</button>
       </div>
@@ -40,46 +68,29 @@
 
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
-/* Styling html5-qrcode agar serasi dengan Tixia Admin */
-#reader {
-  border: none !important;
-}
-#reader__dashboard_section_csr button {
-  background: #383be5 !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 8px 16px !important;
-  border-radius: 8px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  margin: 10px 4px !important;
-  transition: all 0.2s !important;
-}
-#reader__dashboard_section_csr button:hover {
-  background: #2f32d4 !important;
-}
-#reader__dashboard_section_csr select {
-  padding: 8px 12px !important;
-  border: 1px solid #cbd5e1 !important;
-  border-radius: 8px !important;
-  font-size: 13px !important;
-  outline: none !important;
-  background: #fff !important;
-}
-#reader img {
-  display: none !important;
+/* Styling reader container */
+#reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 18px !important;
 }
 </style>
 <script>
 let scanningCode = '{{ request('code') }}';
-let html5QrcodeScanner;
+let html5QrCode;
+let selectedCameraId;
 
 function onScanSuccess(decodedText, decodedResult) {
+  // Mainkan efek bip getar jika didukung
+  if (navigator.vibrate) navigator.vibrate(100);
+
   const input = document.getElementById('scan-code-input');
-  if (input && input.value !== decodedText) {
+  if (input) {
     input.value = decodedText;
     processScan();
+    // Stop kamera sementara setelah berhasil deteksi untuk menghindari double-trigger
+    stopCamera();
   }
 }
 
@@ -92,20 +103,107 @@ document.addEventListener('DOMContentLoaded', function () {
     if (scanningCode) setTimeout(processScan, 300);
   }
 
-  // Mulai inisialisasi QR scanner kamera
-  if (typeof Html5QrcodeScanner !== 'undefined') {
-    html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader", 
-      { 
-        fps: 15, 
-        qrbox: { width: 200, height: 200 },
-        rememberLastUsedCamera: true
-      },
-      /* verbose= */ false
-    );
-    html5QrcodeScanner.render(onScanSuccess);
+  // Siapkan instansi html5QrCode secara background
+  if (typeof Html5Qrcode !== 'undefined') {
+    html5QrCode = new Html5Qrcode("reader");
   }
 });
+
+// Fungsi memicu kamera dan meminta izin akses
+function startCamera() {
+  const placeholder = document.getElementById('scanner-placeholder');
+  const startBtn = document.getElementById('start-scan-btn');
+  const stopBtn = document.getElementById('stop-scan-btn');
+  const selectContainer = document.getElementById('camera-select-container');
+  const selectElement = document.getElementById('camera-select');
+
+  if (!html5QrCode) {
+    showToast('Scanner library gagal dimuat. Coba refresh halaman.');
+    return;
+  }
+
+  // Request izin kamera & dapatkan list kamera
+  Html5Qrcode.getCameras().then(devices => {
+    if (devices && devices.length > 0) {
+      // Tampilkan pilihan kamera jika ada lebih dari 1
+      if (devices.length > 1) {
+        selectContainer.style.display = 'block';
+        selectElement.innerHTML = '';
+        devices.forEach((device, index) => {
+          const opt = document.createElement('option');
+          opt.value = device.id;
+          opt.text = device.label || `Kamera ${index + 1}`;
+          selectElement.appendChild(opt);
+        });
+
+        // Set default ke kamera belakang (environment) jika ada
+        const backCam = devices.find(device => device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('belakang') || device.label.toLowerCase().includes('environment'));
+        if (backCam) {
+          selectedCameraId = backCam.id;
+          selectElement.value = backCam.id;
+        } else {
+          selectedCameraId = devices[0].id;
+        }
+
+        // Tangani pergantian kamera
+        selectElement.onchange = function() {
+          stopCamera().then(() => {
+            selectedCameraId = selectElement.value;
+            launchScanner(selectedCameraId);
+          });
+        };
+      } else {
+        selectedCameraId = devices[0].id;
+      }
+
+      placeholder.style.display = 'none';
+      startBtn.style.display = 'none';
+      stopBtn.style.display = 'block';
+
+      launchScanner(selectedCameraId);
+    } else {
+      showToast('Kamera tidak ditemukan pada perangkat ini.');
+    }
+  }).catch(err => {
+    console.error(err);
+    showToast('Izin akses kamera ditolak browser.');
+  });
+}
+
+function launchScanner(cameraId) {
+  html5QrCode.start(
+    cameraId, 
+    {
+      fps: 15,
+      qrbox: { width: 220, height: 220 }
+    },
+    onScanSuccess,
+    (errorMessage) => {
+      // verbose error dimatikan agar log bersih
+    }
+  ).catch(err => {
+    showToast('Gagal memulai kamera: ' + err);
+  });
+}
+
+function stopCamera() {
+  const placeholder = document.getElementById('scanner-placeholder');
+  const startBtn = document.getElementById('start-scan-btn');
+  const stopBtn = document.getElementById('stop-scan-btn');
+  const selectContainer = document.getElementById('camera-select-container');
+
+  if (html5QrCode && html5QrCode.isScanning) {
+    return html5QrCode.stop().then(() => {
+      placeholder.style.display = 'flex';
+      startBtn.style.display = 'block';
+      stopBtn.style.display = 'none';
+      selectContainer.style.display = 'none';
+    }).catch(err => {
+      console.error('Gagal mematikan kamera: ', err);
+    });
+  }
+  return Promise.resolve();
+}
 
 function processScan() {
   const input = document.getElementById('scan-code-input');
