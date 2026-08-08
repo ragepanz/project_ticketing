@@ -108,7 +108,7 @@ class AdminController extends Controller
             ['event_id' => $event->id, 'price' => $event->price, 'quota' => $event->quota, 'status' => $event->status]
         );
 
-        Cache::forget('events.published');
+        Cache::forget('events.all');
 
         return redirect()->route('admin.events')->with('success', 'Event berhasil ditambahkan.');
     }
@@ -152,7 +152,7 @@ class AdminController extends Controller
             ['event_id' => $event->id, 'changed_fields' => array_keys($validated)]
         );
 
-        Cache::forget('events.published');
+        Cache::forget('events.all');
 
         return redirect()->route('admin.events')->with('success', 'Event berhasil diperbarui.');
     }
@@ -169,7 +169,7 @@ class AdminController extends Controller
             ['event_id' => $eventId]
         );
 
-        Cache::forget('events.published');
+        Cache::forget('events.all');
 
         return redirect()->route('admin.events')->with('success', 'Event berhasil dihapus.');
     }

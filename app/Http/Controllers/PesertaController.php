@@ -14,11 +14,10 @@ class PesertaController extends Controller
 {
     public function index()
     {
-        $events = Cache::remember('events.published', 600, function () {
+        $events = Cache::remember('events.all', 600, function () {
             return Event::withCount(['participants' => function ($query) {
                 $query->where('status', 'lunas');
-            }])->where('status', Event::STATUS_PUBLISHED)
-              ->orderBy('date', 'asc')
+            }])->orderBy('date', 'asc')
               ->get();
         });
         
@@ -27,10 +26,6 @@ class PesertaController extends Controller
 
     public function detail(Event $event)
     {
-        if ($event->status !== Event::STATUS_PUBLISHED) {
-            abort(404, 'Event tidak ditemukan atau belum dibuka.');
-        }
-
         $event->loadCount(['participants' => function ($query) {
             $query->where('status', 'lunas');
         }]);
@@ -144,7 +139,7 @@ class PesertaController extends Controller
         $request->session()->put('ticket_trx_id', $participant->trx_id);
         $request->session()->put('ticket_event_id', $event->id);
 
-        Cache::forget('events.published');
+        Cache::forget('events.all');
 
         SendTicketEmail::dispatch($participant);
 
