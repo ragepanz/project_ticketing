@@ -4,7 +4,7 @@
 @section('page_title', 'Check Schedule & QR Scan')
 
 @push('head')
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" type="text/javascript"></script>
 @endpush
 
 @section('admin-content')
@@ -114,7 +114,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Siapkan instansi html5QrCode secara background
   if (typeof Html5Qrcode !== 'undefined') {
-    html5QrCode = new Html5Qrcode("reader");
+    try {
+      html5QrCode = new Html5Qrcode("reader");
+      console.log("Scanner ready");
+    } catch(err) {
+      alert("Inisialisasi kamera error: " + err.message);
+    }
+  } else {
+    alert("Perhatian: Library kamera gagal dimuat oleh browser. Cek koneksi internet Anda.");
   }
 });
 
