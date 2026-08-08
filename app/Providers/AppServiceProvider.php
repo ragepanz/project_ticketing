@@ -23,12 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (request()->hasHeader('X-Forwarded-Proto') && request()->header('X-Forwarded-Proto') === 'https') {
-            URL::forceScheme('https');
-        }
-
-        if (str_contains(request()->getHost(), 'ngrok-free.app') || str_contains(request()->getHost(), 'ngrok.io')) {
-            URL::forceScheme('https');
+        if (request()->getHost() !== 'localhost' && request()->getHost() !== '127.0.0.1') {
+            if (request()->hasHeader('X-Forwarded-Proto') && request()->header('X-Forwarded-Proto') === 'https' || str_contains(request()->getHost(), 'ngrok')) {
+                URL::forceScheme('https');
+            }
             URL::forceRootUrl(request()->getSchemeAndHttpHost());
         }
 
