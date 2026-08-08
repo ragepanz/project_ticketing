@@ -3,6 +3,10 @@
 @section('title', 'Check-in Scan QR - Tixia')
 @section('page_title', 'Check Schedule & QR Scan')
 
+@push('head')
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+@endpush
+
 @section('admin-content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap;">
   <div>
@@ -14,8 +18,9 @@
 <div class="tixia-card" style="padding: 32px;">
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
     <div>
-      <div style="width: 100%; aspect-ratio: 1; max-width: 280px; margin: 0 auto; border: 2px dashed #cbd5e1; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 15px; background: #f8fafc; font-weight: 600; text-align: center; padding: 20px;">
-        Arahkan kamera ke QR tiket peserta
+      <!-- Camera Scanner Container -->
+      <div style="width: 100%; max-width: 320px; margin: 0 auto; border: 1px solid #cbd5e1; border-radius: 20px; overflow: hidden; background: #f8fafc; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <div id="reader" style="width: 100%;"></div>
       </div>
 
       <div style="display: flex; gap: 10px; margin-top: 20px; max-width: 380px; margin-left: auto; margin-right: auto;">
@@ -35,9 +40,48 @@
 
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
+/* Styling html5-qrcode agar serasi dengan Tixia Admin */
+#reader {
+  border: none !important;
+}
+#reader__dashboard_section_csr button {
+  background: #383be5 !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  margin: 10px 4px !important;
+  transition: all 0.2s !important;
+}
+#reader__dashboard_section_csr button:hover {
+  background: #2f32d4 !important;
+}
+#reader__dashboard_section_csr select {
+  padding: 8px 12px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  outline: none !important;
+  background: #fff !important;
+}
+#reader img {
+  display: none !important;
+}
 </style>
 <script>
 let scanningCode = '{{ request('code') }}';
+let html5QrcodeScanner;
+
+function onScanSuccess(decodedText, decodedResult) {
+  const input = document.getElementById('scan-code-input');
+  if (input && input.value !== decodedText) {
+    input.value = decodedText;
+    processScan();
+  }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('scan-code-input');
@@ -46,6 +90,20 @@ document.addEventListener('DOMContentLoaded', function () {
       if (e.key === 'Enter') processScan();
     });
     if (scanningCode) setTimeout(processScan, 300);
+  }
+
+  // Mulai inisialisasi QR scanner kamera
+  if (typeof Html5QrcodeScanner !== 'undefined') {
+    html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", 
+      { 
+        fps: 15, 
+        qrbox: { width: 200, height: 200 },
+        rememberLastUsedCamera: true
+      },
+      /* verbose= */ false
+    );
+    html5QrcodeScanner.render(onScanSuccess);
   }
 });
 
@@ -101,15 +159,15 @@ function processScan() {
         <div style="width:56px;height:56px;margin:0 auto 12px;background:${already ? '#fffbeb' : '#f0fdf4'};border-radius:50%;display:flex;align-items:center;justify-content:center;">${iconSvg}</div>
         <div style="font-weight: 800; font-size: 20px; color: ${color};">${msg}</div>
         <div style="margin-top: 20px; text-align: left; background: #ffffff; padding: 18px; border-radius: 14px; border: 1px solid #e2e8f0;">
-          <div style="display:flex; justify-space-between; margin-bottom: 8px; font-size: 14px;">
+          <div style="display:flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
             <span style="color:#64748b;">Nama:</span>
             <strong style="color:#0f172a;">${p.name}</strong>
           </div>
-          <div style="display:flex; justify-space-between; margin-bottom: 8px; font-size: 14px;">
+          <div style="display:flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
             <span style="color:#64748b;">Event:</span>
             <strong style="color:#0f172a;">${p.event ? p.event.title : '—'}</strong>
           </div>
-          <div style="display:flex; justify-space-between; font-size: 14px;">
+          <div style="display:flex; justify-content: space-between; font-size: 14px;">
             <span style="color:#64748b;">Waktu:</span>
             <strong style="color:#0f172a;">${p.checkin_time ? new Date(p.checkin_time).toLocaleString('id-ID') : '-'}</strong>
           </div>
