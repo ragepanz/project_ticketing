@@ -131,15 +131,20 @@ function startCamera() {
     return;
   }
 
+  // Cek dukungan HTTPS / MediaDevices
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert("Browser Anda tidak mendukung akses kamera. Pastikan Anda mengakses web menggunakan awalan HTTPS://, bukan HTTP://.");
+    return;
+  }
+
   if (!html5QrCode) {
     html5QrCode = new Html5Qrcode("reader");
   }
 
   // Tampilkan loading / indikator
   startBtn.disabled = true;
-  startBtn.textContent = 'Membuka Kamera...';
+  startBtn.textContent = 'Meminta Izin Kamera...';
 
-  // Coba jalankan kamera belakang secara langsung menggunakan facingMode "environment"
   const config = { 
     fps: 15, 
     qrbox: { width: 200, height: 200 },
@@ -164,39 +169,52 @@ function startCamera() {
     );
   };
 
-  startWithFacingMode()
-    .then(() => {
-      onCameraStarted();
-      populateCameraList();
-    })
-    .catch(err => {
-      console.warn("Gagal pakai facingMode, mencoba via getCameras()...", err);
-      // Fallback ke getCameras() jika facingMode tidak didukung
-      Html5Qrcode.getCameras().then(devices => {
-        if (devices && devices.length > 0) {
-          const backCam = devices.find(d => 
-            (d.label || '').toLowerCase().includes('back') || 
-            (d.label || '').toLowerCase().includes('belakang') || 
-            (d.label || '').toLowerCase().includes('environment')
-          );
-          const camId = backCam ? backCam.id : devices[0].id;
-          return startWithCameraId(camId).then(() => {
-            onCameraStarted();
-            populateCameraList(devices);
+  // Pancing prompt izin secara native terlebih dahulu
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    .then(function(stream) {
+      // Izin sukses didapatkan. Matikan stream pancingan ini segera.
+      stream.getTracks().forEach(track => track.stop());
+
+      startBtn.textContent = 'Menyalakan Scanner...';
+
+      // Jalankan scanner yang sesungguhnya
+      startWithFacingMode()
+        .then(() => {
+          onCameraStarted();
+          populateCameraList();
+        })
+        .catch(err => {
+          console.warn("Gagal start facingMode, mencoba via getCameras()...", err);
+          Html5Qrcode.getCameras().then(devices => {
+            if (devices && devices.length > 0) {
+              const backCam = devices.find(d => 
+                (d.label || '').toLowerCase().includes('back') || 
+                (d.label || '').toLowerCase().includes('belakang') || 
+                (d.label || '').toLowerCase().includes('environment')
+              );
+              const camId = backCam ? backCam.id : devices[0].id;
+              return startWithCameraId(camId).then(() => {
+                onCameraStarted();
+                populateCameraList(devices);
+              });
+            } else {
+              throw new Error('Tidak ada perangkat kamera yang ditemukan.');
+            }
+          }).catch(finalErr => {
+            console.error("Camera Start Error:", finalErr);
+            resetCameraUI();
+            alert('Gagal mengakses kamera: ' + (finalErr.message || finalErr));
           });
-        } else {
-          throw new Error('Tidak ada perangkat kamera yang ditemukan.');
-        }
-      }).catch(finalErr => {
-        console.error("Camera Start Error:", finalErr);
-        resetCameraUI();
-        let msg = finalErr.message || finalErr;
-        if (msg.toString().includes('NotAllowedError') || msg.toString().includes('Permission')) {
-          alert('Izin kamera ditolak oleh browser. Mohon izinkan akses kamera di situs ini (klik ikon gembok/setelan situs di Chrome) lalu muat ulang halaman.');
-        } else {
-          alert('Gagal mengakses kamera: ' + msg);
-        }
-      });
+        });
+    })
+    .catch(function(err) {
+      console.error("Izin Kamera Ditolak:", err);
+      resetCameraUI();
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        alert('Izin kamera ditolak oleh browser. Mohon izinkan akses kamera untuk situs ini di pengaturan browser Anda.');
+      } else {
+        alert('Gagal meminta akses kamera: ' + err.message);
+      }
     });
 }
 
