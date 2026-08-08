@@ -127,21 +127,22 @@ function startCamera() {
   const selectElement = document.getElementById('camera-select');
 
   if (typeof Html5Qrcode === 'undefined') {
-    showToast('Scanner library gagal dimuat. Coba refresh halaman.');
+    alert('Library html5-qrcode GAGAL dimuat. Cek koneksi internet & refresh halaman.');
     return;
   }
 
   // Cek dukungan HTTPS / MediaDevices
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    alert("Browser Anda tidak mendukung akses kamera. Pastikan Anda mengakses web menggunakan awalan HTTPS://, bukan HTTP://.");
+    alert("Browser tidak mendukung akses kamera. Pastikan akses via HTTPS:// (bukan HTTP).");
     return;
   }
 
   if (!html5QrCode) {
     try {
       html5QrCode = new Html5Qrcode("reader");
+      console.log("Html5Qrcode instance created");
     } catch (e) {
-      alert("Gagal menginisialisasi scanner: " + e.message);
+      alert("Gagal inisialisasi scanner: " + e.message);
       return;
     }
   }
@@ -149,8 +150,8 @@ function startCamera() {
   // Tampilkan loading / indikator
   startBtn.disabled = true;
   startBtn.textContent = 'Membuka Kamera...';
+  console.log("Starting camera...");
 
-  // Config yang fleksibel tanpa aspect ratio strict
   const config = { 
     fps: 10, 
     qrbox: function(width, height) {
@@ -164,7 +165,7 @@ function startCamera() {
       { facingMode: "environment" },
       config,
       onScanSuccess,
-      () => {}
+      (err) => { console.warn("Scan error:", err); }
     );
   };
 
@@ -173,19 +174,21 @@ function startCamera() {
       cameraId,
       config,
       onScanSuccess,
-      () => {}
+      (err) => { console.warn("Scan error:", err); }
     );
   };
 
-  // Jalankan scanner langsung menggunakan facingMode
+  // Jalankan scanner langsung
   startWithFacingMode()
     .then(() => {
+      console.log("Camera started successfully via facingMode");
       onCameraStarted();
       populateCameraList();
     })
     .catch(err => {
-      console.warn("Gagal start facingMode, mencoba via getCameras()...", err);
+      console.error("facingMode failed:", err);
       
+      // Fallback
       Html5Qrcode.getCameras().then(devices => {
         if (devices && devices.length > 0) {
           const backCam = devices.find(d => 
@@ -200,12 +203,12 @@ function startCamera() {
             populateCameraList(devices);
           });
         } else {
-          throw new Error('Tidak ada perangkat kamera yang terdeteksi.');
+          throw new Error('Tidak ada kamera terdeteksi.');
         }
       }).catch(finalErr => {
         console.error("Camera Start Error:", finalErr);
         resetCameraUI();
-        alert('Gagal mengakses kamera: ' + (finalErr.message || finalErr));
+        alert('Gagal akses kamera: ' + (finalErr.message || finalErr));
       });
     });
 }
