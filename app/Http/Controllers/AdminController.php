@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\City;
 use App\Models\Event;
 use App\Models\Participant;
 use App\Models\Payment;
+use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,7 +48,7 @@ class AdminController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('admin.login');
+        return redirect()->route('client.login');
     }
 
     public function dashboard()
@@ -424,5 +426,98 @@ class AdminController extends Controller
         );
 
         return redirect()->route('admin.dashboard')->with('success', 'Password berhasil diubah.');
+    }
+
+    // ==========================================
+    // TESTIMONIALS MODERATION MANAGEMENT
+    // ==========================================
+    public function testimonials()
+    {
+        $testimonials = Testimonial::latest()->get();
+        return view('admin.testimonials', compact('testimonials'));
+    }
+
+    public function storeTestimonial(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'city_or_event' => 'nullable|string|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+            'is_featured' => 'nullable|boolean',
+        ]);
+
+        Testimonial::create([
+            'name' => $validated['name'],
+            'city_or_event' => $validated['city_or_event'] ?? 'Peserta Event',
+            'rating' => $validated['rating'],
+            'comment' => $validated['comment'],
+            'is_featured' => $request->has('is_featured'),
+        ]);
+
+        Cache::forget('testimonials.featured');
+
+        return back()->with('success', 'Ulasan berhasil ditambahkan.');
+    }
+
+    public function toggleTestimonial(Testimonial $testimonial)
+    {
+        $testimonial->update([
+            'is_featured' => !$testimonial->is_featured,
+        ]);
+
+        Cache::forget('testimonials.featured');
+
+        $status = $testimonial->is_featured ? 'ditampilkan di beranda' : 'disembunyikan dari beranda';
+        return back()->with('success', 'Status ulasan berhasil diubah: ' . $status . '.');
+    }
+
+    public function destroyTestimonial(Testimonial $testimonial)
+    {
+        $testimonial->delete();
+        Cache::forget('testimonials.featured');
+        return back()->with('success', 'Ulasan berhasil dihapus.');
+    }
+
+    // ==========================================
+    // CITIES / REGIONS MANAGEMENT
+    // ==========================================
+    public function cities()
+    {
+        $cities = City::orderBy('name', 'asc')->get();
+        return view('admin.cities', compact('cities'));
+    }
+
+    public function storeCity(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'location_name' => 'nullable|string|max:255',
+            'image' => 'nullable|image|max:3072',
+        ]);
+
+        $imageUrl = '/images/gallery1.png';
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('cities', 'public');
+            $imageUrl = Storage::url($path);
+        }
+
+        City::create([
+            'name' => strtoupper($validated['name']),
+            'slug' => Str::slug($validated['name']),
+            'location_name' => $validated['location_name'] ?? 'Convention Center',
+            'image_url' => $imageUrl,
+        ]);
+
+        Cache::forget('cities.all');
+
+        return back()->with('success', 'Wilayah / Kota berhasil ditambahkan.');
+    }
+
+    public function destroyCity(City $city)
+    {
+        $city->delete();
+        Cache::forget('cities.all');
+        return back()->with('success', 'Wilayah / Kota berhasil dihapus.');
     }
 }

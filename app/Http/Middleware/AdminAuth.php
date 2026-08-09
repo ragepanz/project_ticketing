@@ -12,7 +12,7 @@ class AdminAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->session()->get('admin_logged_in') && (!Auth::check() || !in_array(Auth::user()?->role, ['admin', 'superadmin']))) {
-            return redirect()->route('admin.login');
+            return redirect()->route('client.login');
         }
 
         return $next($request);

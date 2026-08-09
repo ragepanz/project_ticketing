@@ -1,392 +1,374 @@
 @extends('layouts.app')
 
-@section('title', 'Ticketin Prototipe')
+@section('title', 'Titik Temu Official — Mental Talk & Hypnotherapy Experience')
 @section('body_class', 'dark-mode')
 
 @section('fullwidth')
-<!-- 1. MODERN BENTO HERO SECTION -->
-<section class="bento-hero">
-  <div class="bento-hero-container">
-    <!-- Left Hero Info -->
-    <div class="hero-left">
-      <div class="hero-pill-badge">
-        <span class="dot"></span>
-        <span>SPECIAL EVENT 2026 · JICC SENAYAN</span>
-      </div>
+<!-- 1. HERO SPEAKER BANNER (Transparent Cutout & Touch-Scroll Fix) -->
+<section class="temu-hero-wrap">
+  <div class="temu-hero-img-box reveal">
+    <img src="{{ asset('images/hero-person.png') }}" alt="Rizky Fadillah - Clinical Hypnotherapist" class="temu-hero-img">
+  </div>
+</section>
 
-      <h1 class="bento-hero-title">
-        Konferensi & Kajian Akbar <span class="highlight">2026</span>
-      </h1>
+<!-- 2. NARRATIVE / EMOTIONAL QUOTE BOX -->
+<section class="temu-narrative-section">
+  <div class="temu-narrative-box reveal">
+    <p class="temu-quote">
+      “Kamu lagi capek yaa?” Nahan semuanya sendirian, sampai mungkin bilang “aku gapapa kok” padahal hati kamu lagi berisik. Dan perlahan kamu mulai terbiasa nyimpen semuanya itu sendiri. Sampai akhirnya kamu lupa rasanya benar-benar didengerin itu gimana? Di Titik Temu, kamu nggak harus selalu kuat. Kamu boleh cerita, boleh pelan-pelan kenal diri kamu lagi. Kamu ga usah khawatir yaa kita ada di sini buat dengerin kamu.
+    </p>
+    <p class="temu-subquote">
+      Titik Temu itu ruang aman buat kamu yang udah capek nyimpen semuanya sendiri. Lewat sesi mental talk & hypnotherapy experience, kamu akan ditemenin buat pelan-pelan pulih tanpa harus dipaksa jadi kuat.
+    </p>
 
-      <p class="bento-hero-sub">
-        Platform pendaftaran resmi sesi kajian utama & seminar inspiratif. Dapatkan tiket Anda dan ikuti rangkaian acara spesial bersama para ilmuwan & ustadz ternama.
-      </p>
-
-      <!-- Live Countdown Timer -->
-      <div class="hero-countdown-box">
-        <div class="cd-unit">
-          <div class="num" id="cdDays">00</div>
-          <div class="label">Hari</div>
-        </div>
-        <div class="cd-unit">
-          <div class="num" id="cdHours">00</div>
-          <div class="label">Jam</div>
-        </div>
-        <div class="cd-unit">
-          <div class="num" id="cdMins">00</div>
-          <div class="label">Menit</div>
-        </div>
-        <div class="cd-unit">
-          <div class="num" id="cdSecs">00</div>
-          <div class="label">Detik</div>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="hero-cta-group">
-        <a href="#sessions" class="btn-bento-primary">
-          <span>Eksplor Sesi & Tiket</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </a>
-
-        <a href="{{ route('peserta.search-order') }}" class="btn-bento-secondary">
-          <span>Cek Tiket Saya</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Right Side 3D Glass Stack Cards -->
-    <div class="hero-right">
-      <div class="hero-glass-stack">
-        <!-- Main Front Card -->
-        <div class="stack-card main-card">
-          <div class="card-header-badge">
-            <span class="tag">SESI UTAMA</span>
-            <span class="quota-badge">Quota 500 Kursi</span>
-          </div>
-
-          <h3 style="font-size:22px; font-weight:800; color:#fff; margin-bottom:6px;">
-            CINTA ITU Bernama Ta'at
-          </h3>
-
-          <p style="font-size:13px; color:var(--bento-muted); margin-bottom:20px;">
-            Ustadz Dr. Khalid Basalamah · 10.00 - 11.30 WIB
-          </p>
-
-          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px;">
-            <div style="font-size:12px; color:rgba(255,255,255,0.7);">JICC Senayan, Jakarta</div>
-            <a href="#sessions" style="color:var(--bento-emerald); font-weight:700; font-size:13px;">Daftar Sesi →</a>
-          </div>
-        </div>
-
-        <!-- Background Stack Card 1 -->
-        <div class="stack-card bg-card-1">
-          <div class="card-header-badge">
-            <span class="tag">SESI SORE</span>
-          </div>
-          <h3 style="font-size:18px; color:#fff;">KETIKA Hati Memilih</h3>
-          <p style="font-size:12px; color:var(--bento-muted);">Ustadz Dr. Syafiq Riza Basalamah</p>
-        </div>
-
-        <!-- Background Stack Card 2 -->
-        <div class="stack-card bg-card-2">
-          <div class="card-header-badge">
-            <span class="tag">SESI PAGI</span>
-          </div>
-          <h3 style="font-size:18px; color:#fff;">SETIAP KITA, ADA MAHAKARYA</h3>
-        </div>
-      </div>
+    <div class="temu-hero-btns">
+      <a href="#events" class="btn-temu-dark">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        <span>AKU MAU IKUT & PULIH</span>
+      </a>
+      <a href="#events" class="btn-temu-teal">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <span>LIHAT JADWAL EVENT</span>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- 2. BENTO GRID HIGHLIGHTS SECTION -->
-<section class="bento-section" id="bento">
-  <div class="section-title-wrap">
-    <h2>Highlight & Fasilitas Event</h2>
-    <p>Pengalaman konferensi & pendaftaran tiket yang cepat, transparan, dan modern</p>
+<!-- 3. DAFTAR EVENT HORIZONTAL CAROUSEL -->
+<section class="temu-events-section" id="events">
+  <div class="temu-section-head reveal">
+    <h2>Daftar Event</h2>
   </div>
 
-  <div class="bento-grid">
-    <!-- Item 1: Speaker Spotlight (Span 2) -->
-    <div class="bento-item span-2">
-      <div>
-        <div class="icon-glow">
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-      </div>
-        <h3>Pemateri Terbaik & Berpengalaman</h3>
-        <p>
-          Menghadirkan narasumber utama berpengaruh untuk menyampaikan ilmu syar'i, kesehatan, dan inspirasi kehidupan dalam suasana yang khidmat di Jakarta International Convention Center.
-        </p>
-      </div>
+  <div class="temu-carousel-wrap reveal">
+    <button class="temu-carousel-nav-btn prev" onclick="scrollEvents(-1)" aria-label="Sebelumnya">‹</button>
+    <button class="temu-carousel-nav-btn next" onclick="scrollEvents(1)" aria-label="Berikutnya">›</button>
 
-      <div style="display:flex; gap:16px; margin-top:24px; flex-wrap:wrap;">
-        <span style="background:rgba(255,255,255,0.06); padding:8px 16px; border-radius:999px; font-size:12px; border:1px solid rgba(255,255,255,0.1);">Ust. Dr. Khalid Basalamah</span>
-        <span style="background:rgba(255,255,255,0.06); padding:8px 16px; border-radius:999px; font-size:12px; border:1px solid rgba(255,255,255,0.1);">Ust. Dr. Syafiq Riza Basalamah</span>
-        <span style="background:rgba(255,255,255,0.06); padding:8px 16px; border-radius:999px; font-size:12px; border:1px solid rgba(255,255,255,0.1);">dr. Bobby Arfhan Anwar</span>
-      </div>
-    </div>
-
-    <!-- Item 2: Lokasi & Akses -->
-    <div class="bento-item">
-      <div>
-        <div class="icon-glow">
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-      </div>
-        <h3>Lokasi Strategis</h3>
-        <p>Jakarta International Convention Center (JICC) Senayan. Akses mudah dengan transportasi publik & fasilitas lengkap.</p>
-      </div>
-      <div style="font-size:12px; color:var(--bento-emerald); font-weight:600; margin-top:20px;">Sabtu, 20 Juni 2026</div>
-    </div>
-
-    <!-- Item 3: Parallel Fairs -->
-    <div class="bento-item">
-      <div>
-        <div class="icon-glow">
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11m16-11v11M8 14v.01M12 14v.01M16 14v.01M9 6.5V6a3 3 0 116 0v.5"/></svg>
-      </div>
-        <h3>Parallel Events</h3>
-        <p>Umroh & Hajj Fair, Halal Culinary Fair, dan Interactive Kids Corner.</p>
-      </div>
-      <div style="display:flex; gap:8px; margin-top:16px;">
-        <span style="font-size:11px; background:rgba(6,182,212,0.15); color:var(--bento-cyan); padding:4px 10px; border-radius:6px;">Halal Fair</span>
-        <span style="font-size:11px; background:rgba(99,102,241,0.15); color:var(--bento-indigo); padding:4px 10px; border-radius:6px;">Travel Fair</span>
-      </div>
-    </div>
-
-    <!-- Item 4: Instant E-Ticket (Span 2) -->
-    <div class="bento-item span-2">
-      <div>
-        <div class="icon-glow">
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
-      </div>
-        <h3>E-Tiket Instant dengan QR Code</h3>
-        <p>Setelah melakukan konfirmasi, tiket digital lengkap dengan kode transaksi unik dan QR Code akan langsung diterbitkan untuk kemudahan check-in di lokasi.</p>
-      </div>
-      <div style="margin-top:20px; font-size:13px; color:var(--bento-emerald); font-weight:700;">Simulasi Pendaftaran Real-Time Active ✓</div>
-    </div>
-
-    <!-- Item 5: Gallery Highlights (Span 3) -->
-    <div class="bento-item span-3">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
-        <h3 style="margin:0;">Dokumentasi & Galeri Acara</h3>
-        <span style="font-size:13px; color:var(--bento-muted);">Klik foto untuk memperbesar</span>
-      </div>
-
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px;">
-        <div style="height:160px; border-radius:16px; overflow:hidden; cursor:pointer;" onclick="openPhotoModal('Kajian Akbar Utama', 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=800&q=80')">
-          <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=500&q=80" style="width:100%; height:100%; object-fit:cover; transition:.3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-        </div>
-        <div style="height:160px; border-radius:16px; overflow:hidden; cursor:pointer;" onclick="openPhotoModal('Khidmat Jamaah JICC', 'https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=800&q=80')">
-          <img src="https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=500&q=80" style="width:100%; height:100%; object-fit:cover; transition:.3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-        </div>
-        <div style="height:160px; border-radius:16px; overflow:hidden; cursor:pointer;" onclick="openPhotoModal('Suasana Inspiratif', 'https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=800&q=80')">
-          <img src="https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=500&q=80" style="width:100%; height:100%; object-fit:cover; transition:.3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-        </div>
-        <div style="height:160px; border-radius:16px; overflow:hidden; cursor:pointer;" onclick="openPhotoModal('Exhibition Area', 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80')">
-          <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=80" style="width:100%; height:100%; object-fit:cover; transition:.3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 3. SESSIONS SCHEDULE & BOOKING LIST -->
-<section class="bento-section" id="sessions" style="padding-top:20px;">
-  <div class="section-title-wrap">
-    <h2>Jadwal Sesi & Pendaftaran Tiket</h2>
-    <p>Pilih sesi yang ingin Anda ikuti dan klik untuk mendaftar</p>
-  </div>
-
-  <div class="sessions-list">
-    @forelse($events as $event)
-      @php 
-        $full = $event->participants_count >= $event->quota; 
-        $isPublished = $event->status === \App\Models\Event::STATUS_PUBLISHED;
-      @endphp
-      @if(!$isPublished)
-      <div class="session-card" style="opacity:0.5; cursor:default;">
-        <div class="session-card-image">
-          <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
-        </div>
-        <div class="session-card-body">
-          <div class="session-time-badge">
-            {{ $event->time_slot ?? '10.00 WIB' }} · {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
-          </div>
-          <div class="session-card-title">{{ $event->title }}</div>
-          <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
-          <div class="session-card-action" style="background:rgba(100,116,139,0.2); border-color:rgba(100,116,139,0.3); color:#94a3b8;">
-            @if($event->status === \App\Models\Event::STATUS_DRAFT) Belum Dibuka
-            @elseif($event->status === \App\Models\Event::STATUS_CLOSED) Registrasi Ditutup
-            @elseif($event->status === \App\Models\Event::STATUS_COMPLETED) Event Selesai
-            @else Tidak Tersedia
+    <div class="temu-events-track" id="eventsTrack">
+      @forelse($events as $event)
+        @php 
+          $full = $event->participants_count >= $event->quota; 
+          $isPublished = $event->status === \App\Models\Event::STATUS_PUBLISHED;
+        @endphp
+        <div class="temu-event-card" data-location="{{ strtolower($event->location) }}">
+          <img src="{{ $event->image_url }}" alt="{{ $event->title }}" class="temu-event-poster">
+          <div class="temu-event-body">
+            <div class="temu-venue-badge">{{ $event->location ?? 'HOTEL & CONVENTION CENTER' }}</div>
+            <div class="temu-event-title">{{ $event->title }} | {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}</div>
+            
+            @if(!$isPublished)
+              <div class="session-card-action" style="background:rgba(100,116,139,0.2); border-color:rgba(100,116,139,0.3); color:#94a3b8; width:100%; border-radius:12px; padding:12px; font-weight:700;">
+                @if($event->status === \App\Models\Event::STATUS_DRAFT) Belum Dibuka
+                @elseif($event->status === \App\Models\Event::STATUS_CLOSED) Registrasi Ditutup
+                @else Event Selesai
+                @endif
+              </div>
+            @elseif($full)
+              <div class="session-card-action" style="background:rgba(239,68,68,0.2); border-color:rgba(239,68,68,0.3); color:#ef4444; width:100%; border-radius:12px; padding:12px; font-weight:700;">
+                Kuota Penuh
+              </div>
+            @else
+              <a href="{{ Auth::check() && Auth::user()->role === 'client' ? route('peserta.detail', $event) : route('client.login', ['redirect' => route('peserta.detail', $event)]) }}" class="btn-temu-teal" style="width:100%; justify-content:center;">
+                ☝ AMANKAN TIKET SEKARANG
+              </a>
             @endif
           </div>
         </div>
+      @empty
+        <div class="empty" style="color:#fff; text-align:center; padding:40px; width:100%;">Belum ada sesi event yang tersedia.</div>
+      @endforelse
+    </div>
+  </div>
+</section>
+
+<!-- 4. VISION & STORY SECTION -->
+<section class="temu-story-section">
+  <div class="temu-story-box reveal">
+    <p class="temu-story-text">
+      Titik Temu lahir dari satu kenyataan pahit yaitu terlalu banyak orang di luar sana yang mentalnya hampir runtuh, tapi nggak punya tempat buat bersandar. Dan tanpa kita sadari, ribuan orang dari berbagai kota udah datang ke sini bukan karena hidupnya ringan, tapi karena mereka butuh tempat yang nggak menghakimi rasa lelahnya.
+    </p>
+    <p class="temu-story-text">
+      Visi kita sederhana tapi berat: jadi jembatan buat jiwa-jiwa yang retak, yang setiap hari berusaha nggak hancur di depan orang lain, yang hatinya penuh luka tapi tetap pura-pura baik-baik aja.
+    </p>
+    <p class="temu-story-text">
+      Di Titik Temu, kamu boleh rapuh. Kamu boleh jatuh. Kamu boleh jujur sama diri sendiri. Karena di sini, proses pulih itu nggak dipaksa cepat yang penting kamu nggak melangkah sendirian lagi.
+    </p>
+  </div>
+</section>
+
+<!-- 5. PHOTO GALLERY AUTO-SLIDER -->
+<section class="temu-gallery-section">
+  <div class="temu-gallery-slider reveal" id="gallerySlider">
+    <div class="temu-gallery-slides">
+      <div class="temu-gallery-slide active">
+        <img src="{{ asset('images/gallery1.png') }}" alt="Titik Temu Event Atmosphere 1">
       </div>
-      @elseif($full)
-      <div class="session-card" style="opacity:0.5; cursor:default;">
-        <div class="session-card-image">
-          <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
-        </div>
-        <div class="session-card-body">
-          <div class="session-time-badge">
-            {{ $event->time_slot ?? '10.00 WIB' }} · {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
-          </div>
-          <div class="session-card-title">{{ $event->title }}</div>
-          <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
-          <div class="session-card-action" style="background:rgba(239,68,68,0.2); border-color:rgba(239,68,68,0.3); color:#ef4444;">Kuota Penuh</div>
+      <div class="temu-gallery-slide">
+        <img src="{{ asset('images/gallery1.png') }}" alt="Titik Temu Event Atmosphere 2" style="filter: hue-rotate(15deg);">
+      </div>
+      <div class="temu-gallery-slide">
+        <img src="{{ asset('images/gallery1.png') }}" alt="Titik Temu Event Atmosphere 3" style="filter: brightness(1.1);">
+      </div>
+    </div>
+    
+    <!-- Dots -->
+    <div class="temu-gallery-dots" id="galleryDots">
+      <div class="temu-gallery-dot active" onclick="setGallerySlide(0)"></div>
+      <div class="temu-gallery-dot" onclick="setGallerySlide(1)"></div>
+      <div class="temu-gallery-dot" onclick="setGallerySlide(2)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. TESTIMONIALS SECTION ("YANG DI RASAKAN" PER PERSON) -->
+<section class="temu-testimonials-section">
+  <div class="temu-section-head reveal">
+    <h2>“Yang Di Rasakan”</h2>
+    <div style="color: #facc15; font-size: 14px; font-weight: 700; margin-top: 12px; letter-spacing: 0.05em;">
+      ★★★★★ <span style="color: #ffffff; margin-left: 6px;">Dari Ratusan Peserta</span>
+    </div>
+  </div>
+
+  <div class="temu-testimonials-grid">
+    @forelse($testimonials as $t)
+    <div class="temu-testimonial-card reveal">
+      <div class="temu-testimonial-user-head">
+        <div class="temu-user-avatar">{{ strtoupper(substr($t->name, 0, 1)) }}</div>
+        <div class="temu-user-details">
+          <h4>{{ $t->name }}</h4>
+          <span>{{ $t->city_or_event ?? 'Peserta Event' }}</span>
         </div>
       </div>
-      @else
-      <a href="{{ Auth::check() && Auth::user()->role === 'client' ? route('peserta.detail', $event) : route('client.login', ['redirect' => route('peserta.detail', $event)]) }}" class="session-card">
-        <div class="session-card-image">
-          <img src="{{ $event->image_url }}" alt="{{ $event->title }}">
-        </div>
-        <div class="session-card-body">
-          <div class="session-time-badge">
-            {{ $event->time_slot ?? '10.00 WIB' }} · {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
-          </div>
-          <div class="session-card-title">{{ $event->title }}</div>
-          <div class="session-card-meta">{{ $event->speaker ?? 'Pemateri Utama' }} · {{ $event->location }}</div>
-          <div class="session-card-action">Beli Tiket</div>
-        </div>
-      </a>
-      @endif
+      <div style="color:#f59e0b; font-size:14px; margin-bottom:12px;">
+        {{ str_repeat('★', $t->rating) }}
+      </div>
+      <p class="temu-testimonial-quote">
+        “{{ $t->comment }}”
+      </p>
+    </div>
     @empty
-      <div class="empty" style="color:#fff; text-align:center; padding:40px;">Belum ada sesi yang tersedia.</div>
+    <div style="color:#cbd5e1; text-align:center; grid-column:span 3; padding:20px;">Belum ada ulasan yang ditampilkan.</div>
+    @endforelse
+  </div>
+
+  <div style="text-align: center; margin-bottom: 60px;" class="reveal">
+    <a href="#events" class="btn-temu-dark">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+      <span>LIHAT SELURUH EVENT</span>
+    </a>
+  </div>
+</section>
+
+<!-- 7. BERDASARKAN WILAYAH (DYNAMIC CITIES FROM DB) -->
+<section class="temu-city-section" id="wilayah">
+  <div class="temu-section-head reveal">
+    <h2>Berdasarkan Wilayah</h2>
+  </div>
+
+  <div class="temu-city-grid reveal">
+    @forelse($cities as $city)
+    <div class="temu-city-tile" onclick="filterCity('{{ strtolower($city->slug) }}')">
+      {{ $city->name }}
+    </div>
+    @empty
+    <div style="color:#cbd5e1; text-align:center; grid-column:span 5;">Belum ada wilayah kota.</div>
     @endforelse
   </div>
 </section>
 
-<!-- 5. MODERN TECH FOOTER -->
+<!-- 8. FAQ ACCORDION -->
+<section class="temu-faq-section" id="faq">
+  <div class="temu-section-head reveal">
+    <h2>FAQ</h2>
+  </div>
+
+  <div class="temu-faq-box reveal">
+    <div class="temu-faq-item">
+      <div class="temu-faq-question" onclick="toggleFaq(this)">
+        <span>— Kalau aku belum pernah ikut terapi, boleh ikut ?</span>
+        <div class="temu-faq-icon">+</div>
+      </div>
+      <div class="temu-faq-answer">
+        Boleh banget. Titik Temu justru dirancang untuk kamu yang baru mulai. Kamu nggak perlu punya pengalaman apa-apa, cukup datang dan hadir sebagai diri kamu sendiri.
+      </div>
+    </div>
+
+    <div class="temu-faq-item">
+      <div class="temu-faq-question" onclick="toggleFaq(this)">
+        <span>+ Apakah aku harus cerita di depan banyak orang ?</span>
+        <div class="temu-faq-icon">+</div>
+      </div>
+      <div class="temu-faq-answer">
+        Nggak perlu. Sesi hipnoterapi dan refleksi diri dilakukan secara privat dari tempat duduk masing-masing. Kamu tidak akan dipaksa berbicara atau maju ke depan.
+      </div>
+    </div>
+
+    <div class="temu-faq-item">
+      <div class="temu-faq-question" onclick="toggleFaq(this)">
+        <span>+ Apakah ini aman secara emosional?</span>
+        <div class="temu-faq-icon">+</div>
+      </div>
+      <div class="temu-faq-answer">
+        Sangat aman. Seluruh sesi dipandu langsung oleh Clinical Hypnotherapist sertifikasi profesional dengan suasana kondusif, tenang, dan tanpa penghakiman.
+      </div>
+    </div>
+
+    <div class="temu-faq-item">
+      <div class="temu-faq-question" onclick="toggleFaq(this)">
+        <span>+ Apa itu Hypnotherapy? Apakah aku akan “dikontrol” ?</span>
+        <div class="temu-faq-icon">+</div>
+      </div>
+      <div class="temu-faq-answer">
+        Tidak sama sekali. Hypnotherapy adalah relaksasi pikiran bawah sadar yang dibimbing. Kamu tetap 100% sadar, mendengar suara sekitar, dan memegang kendali penuh atas diri kamu.
+      </div>
+    </div>
+
+    <div class="temu-faq-item">
+      <div class="temu-faq-question" onclick="toggleFaq(this)">
+        <span>+ Aku takut ke-trigger, gimana ?</span>
+        <div class="temu-faq-icon">+</div>
+      </div>
+      <div class="temu-faq-answer">
+        Tim fasilitator dan panitia siap mendampingi kamu sepanjang sesi jika kamu membutuhkan ruang tenang atau pendampingan saat emosi meluap.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. FOOTER -->
 <footer class="bento-footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="name">EventFlow</div>
-      <div class="sub">Platform Ticketing Seminar & Kajian Akbar</div>
+      <div class="name">TEMU OFFICIAL</div>
+      <div class="sub">Ruang Aman Pulih lewat Mental Talk & Hypnotherapy Experience</div>
     </div>
 
     <div class="footer-contact-group" style="display:flex; flex-direction:column; align-items:center; gap:10px;">
       <div class="footer-contact-title" style="font-size:14px; font-weight:700; color:#fff; letter-spacing:0.05em; text-transform:uppercase;">Hubungi Kami</div>
 
       <div class="footer-contact" style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-        <a href="mailto:info@eventflow.id" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--bento-muted)'">
+        <a href="mailto:info@titiktemuofficial.id" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px;">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          info@eventflow.id
+          info@titiktemuofficial.id
         </a>
-        <a href="https://wa.me/6281234567890" target="_blank" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px; transition:.3s;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--bento-muted)'">
+        <a href="https://wa.me/6288976780924" target="_blank" style="display:flex; align-items:center; gap:8px; color:var(--bento-muted); text-decoration:none; font-size:13px;">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-          +62 812-3456-7890
+          +62 889-7678-0924
         </a>
       </div>
     </div>
 
     <div style="font-size:13px; color:var(--bento-muted); margin-top:16px;">
-      © 2026 EventFlow. All rights reserved.
+      © {{ date('Y') }} Titik Temu Official. All rights reserved.
     </div>
   </div>
 </footer>
 
-<!-- MODAL LIGHTBOX PHOTO -->
-<div class="modal-backdrop" id="photoModal">
-  <div class="modal-content-box">
-    <button class="modal-close-btn" onclick="closePhotoModal()">✕</button>
-    <div class="modal-photo-preview">
-      <img id="modalPhotoImg" src="" alt="Preview">
-    </div>
-    <div class="modal-photo-title" id="modalPhotoTitle"></div>
-  </div>
-</div>
-
-<!-- MODAL EVENT REGISTRATION -->
-<div class="modal-backdrop" id="eventModal">
-  <div class="modal-content-box">
-    <button class="modal-close-btn" onclick="closeEventModal()">✕</button>
-    <div class="modal-event-detail">
-      <div class="detail-speaker" id="modalEventSpeaker"></div>
-      <div class="detail-title" id="modalEventTitle"></div>
-      
-      <div class="detail-meta-list">
-        <div><strong>Tanggal & Waktu:</strong> <span id="modalEventDate"></span> (<span id="modalEventTime"></span>)</div>
-        <div><strong>Lokasi:</strong> <span id="modalEventLocation"></span></div>
-      </div>
-
-      <div class="detail-desc" id="modalEventDesc"></div>
-
-      <a id="modalEventRegisterLink" href="#" class="btn-register-modal">LANJUTKAN REGISTRASI TIKET</a>
-    </div>
-  </div>
-</div>
+<!-- 10. FLOATING BACK TO TOP BUTTON -->
+<button class="back-to-top-btn" id="backToTopBtn" onclick="scrollToTop()" aria-label="Back to top">
+  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+  </svg>
+</button>
 
 @endsection
 
 @push('scripts')
 <script>
-// Countdown Timer logic
-(function startCountdown() {
-  const targetDate = new Date('2026-06-20T08:00:00').getTime();
+// Event Horizontal Carousel Scroll
+function scrollEvents(direction) {
+  const track = document.getElementById('eventsTrack');
+  if (!track) return;
+  const scrollAmount = 360 * direction;
+  track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+}
+
+// Auto Gallery Slider logic (Auto-slide every 4 seconds)
+let galleryIndex = 0;
+let galleryTimer = null;
+
+function setGallerySlide(idx) {
+  const slides = document.querySelectorAll('.temu-gallery-slide');
+  const dots = document.querySelectorAll('.temu-gallery-dot');
+  if (!slides.length) return;
+
+  slides.forEach(s => s.classList.remove('active'));
+  dots.forEach(d => d.classList.remove('active'));
+
+  galleryIndex = idx % slides.length;
+  slides[galleryIndex].classList.add('active');
+  if (dots[galleryIndex]) dots[galleryIndex].classList.add('active');
+}
+
+function autoNextGallery() {
+  const slides = document.querySelectorAll('.temu-gallery-slide');
+  if (slides.length) {
+    setGallerySlide((galleryIndex + 1) % slides.length);
+  }
+}
+
+galleryTimer = setInterval(autoNextGallery, 4000);
+
+// FAQ Accordion Toggle
+function toggleFaq(el) {
+  const item = el.closest('.temu-faq-item');
+  const isOpen = item.classList.contains('active');
   
-  function updateCD() {
-    const now = new Date().getTime();
-    const diff = targetDate - now;
+  document.querySelectorAll('.temu-faq-item').forEach(i => i.classList.remove('active'));
+  
+  if (!isOpen) {
+    item.classList.add('active');
+  }
+}
 
-    if (diff <= 0) return;
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-    const dEl = document.getElementById('cdDays');
-    const hEl = document.getElementById('cdHours');
-    const mEl = document.getElementById('cdMins');
-    const sEl = document.getElementById('cdSecs');
-
-    if (dEl) dEl.textContent = String(days).padStart(2, '0');
-    if (hEl) hEl.textContent = String(hours).padStart(2, '0');
-    if (mEl) mEl.textContent = String(mins).padStart(2, '0');
-    if (sEl) sEl.textContent = String(secs).padStart(2, '0');
+// City Tile Filter logic
+function filterCity(cityName) {
+  const tiles = document.querySelectorAll('.temu-city-tile');
+  tiles.forEach(t => t.classList.remove('active'));
+  
+  if (window.event && window.event.target) {
+    window.event.target.classList.add('active');
   }
 
-  updateCD();
-  setInterval(updateCD, 1000);
-})();
+  const cards = document.querySelectorAll('.temu-event-card');
+  let found = false;
 
-// Photo Modal Lightbox functions
-function openPhotoModal(title, imgSrc) {
-  document.getElementById('modalPhotoTitle').textContent = title;
-  document.getElementById('modalPhotoImg').src = imgSrc;
-  document.getElementById('photoModal').classList.add('active');
+  cards.forEach(card => {
+    const loc = card.getAttribute('data-location') || '';
+    if (loc.includes(cityName)) {
+      card.style.display = 'flex';
+      found = true;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  if (!found) {
+    cards.forEach(c => c.style.display = 'flex');
+  }
+
+  document.getElementById('events').scrollIntoView({ behavior: 'smooth' });
 }
 
-function closePhotoModal() {
-  document.getElementById('photoModal').classList.remove('active');
-}
-
-// Event Poster Modal functions
-function openEventModal(id, title, speaker, timeSlot, date, location, desc, detailUrl) {
-  document.getElementById('modalEventTitle').textContent = title;
-  document.getElementById('modalEventSpeaker').textContent = speaker;
-  document.getElementById('modalEventTime').textContent = timeSlot;
-  document.getElementById('modalEventDate').textContent = date;
-  document.getElementById('modalEventLocation').textContent = location;
-  document.getElementById('modalEventDesc').textContent = desc;
-  document.getElementById('modalEventRegisterLink').href = detailUrl;
-  
-  document.getElementById('eventModal').classList.add('active');
-}
-
-function closeEventModal() {
-  document.getElementById('eventModal').classList.remove('active');
-}
-
-// Close modals on backdrop click
-document.addEventListener('DOMContentLoaded', function() {
-  const pM = document.getElementById('photoModal');
-  const eM = document.getElementById('eventModal');
-  if(pM) pM.addEventListener('click', function(e) { if (e.target === this) closePhotoModal(); });
-  if(eM) eM.addEventListener('click', function(e) { if (e.target === this) closeEventModal(); });
+// Back to top floating button logic
+window.addEventListener('scroll', function() {
+  const btn = document.getElementById('backToTopBtn');
+  if (!btn) return;
+  if (window.scrollY > 400) {
+    btn.classList.add('visible');
+  } else {
+    btn.classList.remove('visible');
+  }
 });
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 @endpush

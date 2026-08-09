@@ -18,6 +18,7 @@ Route::prefix('peserta')->name('peserta.')->group(function () {
     Route::post('/{event:slug}/confirm', [PesertaController::class, 'confirm'])->name('confirm')->middleware('throttle:5,1');
     Route::get('/{event:slug}/tiket', [PesertaController::class, 'ticket'])->name('ticket');
     Route::get('/{event:slug}/tiket/download', [PesertaController::class, 'downloadTicket'])->name('ticket.download');
+    Route::post('/ulasan', [PesertaController::class, 'storeReview'])->name('store-review')->middleware('throttle:5,1');
 });
 
 Route::prefix('client')->name('client.')->group(function () {
@@ -58,5 +59,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/password', [AdminController::class, 'passwordForm'])->name('password.form');
         Route::put('/password', [AdminController::class, 'updatePassword'])->name('password.update');
+
+        Route::get('/testimonials', [AdminController::class, 'testimonials'])->name('testimonials');
+        Route::post('/testimonials', [AdminController::class, 'storeTestimonial'])->name('testimonials.store');
+        Route::patch('/testimonials/{testimonial}/toggle', [AdminController::class, 'toggleTestimonial'])->name('testimonials.toggle');
+        Route::delete('/testimonials/{testimonial}', [AdminController::class, 'destroyTestimonial'])->name('testimonials.destroy');
+
+        Route::get('/cities', [AdminController::class, 'cities'])->name('cities');
+        Route::post('/cities', [AdminController::class, 'storeCity'])->name('cities.store');
+        Route::delete('/cities/{city}', [AdminController::class, 'destroyCity'])->name('cities.destroy');
     });
 });
