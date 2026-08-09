@@ -22,6 +22,15 @@ class ClientController extends Controller
             'password' => 'required',
         ]);
 
+        // Coba login sebagai admin / superadmin dulu
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'admin'])
+            || Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'superadmin'])) {
+            $request->session()->regenerate();
+            $request->session()->put('admin_logged_in', true);
+            return redirect()->route('admin.dashboard');
+        }
+
+        // Lalu coba login sebagai client / peserta
         if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'client'])) {
             $request->session()->regenerate();
             $redirect = $request->input('redirect');
@@ -31,8 +40,9 @@ class ClientController extends Controller
             return redirect()->route('client.dashboard');
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah.']);
+        return back()->withErrors(['email' => 'Email atau password salah.'])->withInput($request->only('email'));
     }
+
 
     public function register()
     {

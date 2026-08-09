@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Event;
 use App\Models\Participant;
+use App\Models\Testimonial;
 use App\Jobs\SendTicketEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,8 +22,16 @@ class PesertaController extends Controller
             }])->orderBy('date', 'asc')
               ->get();
         });
+
+        $testimonials = Cache::remember('testimonials.featured', 600, function () {
+            return Testimonial::where('is_featured', true)->latest()->get();
+        });
+
+        $cities = Cache::remember('cities.all', 600, function () {
+            return City::orderBy('name', 'asc')->get();
+        });
         
-        return view('peserta.index', compact('events'));
+        return view('peserta.index', compact('events', 'testimonials', 'cities'));
     }
 
     public function detail(Event $event)
@@ -177,7 +187,12 @@ class PesertaController extends Controller
 
     public function searchOrder()
     {
-        return view('peserta.search');
+        if (!Auth::check() || Auth::user()->role !== 'client') {
+            return redirect()->route('client.login', ['redirect' => route('client.dashboard')])
+                ->with('info', 'Silakan login terlebih dahulu untuk mengakses akun & melihat tiket Anda.');
+        }
+
+        return redirect()->route('client.dashboard');
     }
 
     public function findOrder(Request $request)
@@ -202,5 +217,25 @@ class PesertaController extends Controller
         $request->session()->put('ticket_event_id', $participant->event_id);
 
         return redirect()->route('peserta.ticket', $participant->event_id);
+    }
+
+    public function storeReview(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'city_or_event' => 'nullable|string|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+        ]);
+
+        Testimonial::create([
+            'name' => $validated['name'],
+            'city_or_event' => $validated['city_or_event'] ?? 'Peserta Event',
+            'rating' => $validated['rating'],
+            'comment' => $validated['comment'],
+            'is_featured' => false, // Requires admin moderation
+        ]);
+
+        return back()->with('success', 'Terima kasih! Ulasan Anda telah terkirim dan akan ditinjau oleh Admin sebelum ditampilkan di beranda.');
     }
 }
