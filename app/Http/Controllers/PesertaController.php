@@ -16,11 +16,12 @@ class PesertaController extends Controller
 {
     public function index()
     {
-        $events = Cache::remember('events.all', 600, function () {
-            return Event::withCount(['participants' => function ($query) {
-                $query->where('status', 'lunas');
-            }])->orderBy('date', 'asc')
-              ->get();
+        $events = Cache::remember('events.published', 600, function () {
+            return Event::where('status', Event::STATUS_PUBLISHED)
+                ->withCount(['participants' => function ($query) {
+                    $query->where('status', 'lunas');
+                }])->orderBy('date', 'asc')
+                ->get();
         });
 
         $testimonials = Cache::remember('testimonials.featured', 600, function () {
@@ -36,6 +37,10 @@ class PesertaController extends Controller
 
     public function detail(Event $event)
     {
+        if ($event->status !== Event::STATUS_PUBLISHED) {
+            abort(404);
+        }
+
         $event->loadCount(['participants' => function ($query) {
             $query->where('status', 'lunas');
         }]);
@@ -149,7 +154,7 @@ class PesertaController extends Controller
         $request->session()->put('ticket_trx_id', $participant->trx_id);
         $request->session()->put('ticket_event_id', $event->id);
 
-        Cache::forget('events.all');
+        Cache::forget('events.published');
 
         SendTicketEmail::dispatch($participant);
 
@@ -187,12 +192,7 @@ class PesertaController extends Controller
 
     public function searchOrder()
     {
-        if (!Auth::check() || Auth::user()->role !== 'client') {
-            return redirect()->route('client.login', ['redirect' => route('client.dashboard')])
-                ->with('info', 'Silakan login terlebih dahulu untuk mengakses akun & melihat tiket Anda.');
-        }
-
-        return redirect()->route('client.dashboard');
+        return view('peserta.search');
     }
 
     public function findOrder(Request $request)

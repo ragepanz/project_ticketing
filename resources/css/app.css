@@ -37,14 +37,14 @@ html {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   scroll-padding-top: 72px; /* Offset for fixed navbar */
 }
 
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ==========================================
@@ -63,6 +63,21 @@ body {
 }
 
 body {
+  background-color: #020c1b;
+  color: var(--bento-text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background:
     /* Teal nebula glow at center-bottom (matches reference image) */
     radial-gradient(ellipse 80% 55% at 50% 75%, rgba(0, 140, 200, 0.28) 0%, transparent 65%),
@@ -74,12 +89,8 @@ body {
     radial-gradient(ellipse 35% 60% at 95% 60%, rgba(0, 120, 180, 0.12) 0%, transparent 55%),
     /* Deep navy base */
     linear-gradient(180deg, #020c1b 0%, #040f24 40%, #020a18 100%);
-  background-attachment: fixed;
-  color: var(--bento-text);
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  position: relative;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* All content layers above canvas */
@@ -102,31 +113,18 @@ body > *:not(#starfield-canvas) {
   50% { transform: translateY(-12px) scale(1.02); opacity: 0.85; }
 }
 
-/* Global Custom Scrollbar (Replaces native browser scrollbar so only 1 scrollbar is drawn) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #020c1b;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 200, 255, 0.5);
-  border-radius: 999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #00c8ff;
-}
+
 
 /* Scroll Reveal Animations (matching htmllandingpage.txt) */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translate3d(0, 40px, 0);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
 }
 .reveal.active {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 h1, h2, h3, h4 {
@@ -3897,7 +3895,7 @@ a {
   /* Prevent horizontal overflow */
   body,
   html {
-    overflow-x: hidden !important;
+    overflow-x: clip !important;
   }
 }
 

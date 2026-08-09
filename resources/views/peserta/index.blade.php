@@ -365,7 +365,7 @@ window.addEventListener('scroll', function() {
   } else {
     btn.classList.remove('visible');
   }
-});
+}, { passive: true });
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -213,10 +213,10 @@ document.addEventListener('DOMContentLoaded', () => showToast('{{ session('succe
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  let W, H, stars = [], dpr = window.devicePixelRatio || 1;
+  let W, H, stars = [], dpr = 1;
 
-  // Reduce star count on mobile for performance
-  const STAR_COUNT = window.innerWidth < 600 ? 120 : 220;
+  // Reduce star count for performance
+  const STAR_COUNT = window.innerWidth < 600 ? 80 : 150;
 
   function resize() {
     W = window.innerWidth;
@@ -267,10 +267,14 @@ document.addEventListener('DOMContentLoaded', () => showToast('{{ session('succe
     }
   }
 
-  let raf, lastT = 0;
+  let raf, lastT = 0, isScrolling = false, scrollTimeout;
 
   function draw(t) {
     raf = requestAnimationFrame(draw);
+    if (isScrolling) {
+      lastT = t;
+      return;
+    }
     ctx.clearRect(0, 0, W, H);
 
     const dt = (t - lastT) / 1000;
@@ -288,12 +292,9 @@ document.addEventListener('DOMContentLoaded', () => showToast('{{ session('succe
 
       // Glow for larger stars
       if (s.size > 1.5) {
-        const grd = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size * 3.5);
-        grd.addColorStop(0, `rgba(${r},${g},${b},${alpha})`);
-        grd.addColorStop(1, `rgba(${r},${g},${b},0)`);
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size * 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = grd;
+        ctx.arc(s.x, s.y, s.size * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha * 0.25})`;
         ctx.fill();
       }
 
@@ -304,6 +305,14 @@ document.addEventListener('DOMContentLoaded', () => showToast('{{ session('succe
       ctx.fill();
     }
   }
+
+  window.addEventListener('scroll', function() {
+    isScrolling = true;
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      isScrolling = false;
+    }, 100);
+  }, { passive: true });
 
   window.addEventListener('resize', function() {
     cancelAnimationFrame(raf);
@@ -326,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         navbar.classList.remove('scrolled');
       }
-    });
+    }, { passive: true });
   }
 
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
